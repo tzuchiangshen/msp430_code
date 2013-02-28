@@ -13,7 +13,7 @@
  *
  * Version: 1.0.0
  * Created: Jul-24-2012
- *  Author: rick@kimballsoftare.com
+ *  Author: rick@kimballsoftware.com
  *    Date: 02-28-2013
  * Version: 1.0.0
  *
