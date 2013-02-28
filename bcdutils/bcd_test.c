@@ -22,6 +22,9 @@
 #include <stdlib.h>
 #include "bcdutils.h"
 
+
+typedef void (*cb_func)(const char);
+
 /**
  * UART serial output routines
  */
@@ -35,6 +38,30 @@ void printc(const char c) {
 
 void println() {
   printc('\n');
+}
+
+/*
+ * bcd16toasc(bcd, write_cb)
+ */
+void bcd16toasc(long bcd, cb_func write_func) {
+  if ( bcd > 0 ) {
+    unsigned shft = 20;
+    unsigned long mask=0xF0000;
+
+    // strip leading zeros
+    while(!(bcd & mask)) {
+      shft-=4, mask>>= 4;
+    }
+
+    // convert nibble at a time 0-9 binary to ascii '0'-'9'
+    do {
+      shft -= 4;
+      write_func((bcd >> shft & 0xF) + '0');
+    } while( shft );
+  }
+  else {
+    printc('0');
+  }
 }
 
 void printbcd16(const unsigned long u) {
@@ -81,15 +108,8 @@ void prints(const char *s) {
 }
 
 void printu(uint16_t i) {
-#if 1
   long n = u16tobcd(i);
-  printbcd16(n);
-#else
-  char buff[5+1+1];
-
-  utoa(i,buff, 10/*base10*/);
-  prints(buff);
-#endif
+  bcd16toasc(n, printc);
 }
 
 void printi(int16_t i) {
@@ -117,7 +137,7 @@ void printl(int32_t i) {
 
 static const uint32_t brd = (F_CPU + (9600 >> 1)) / 9600; // Bit rate divisor
 
-int main(void) {
+void main(void) {
   WDTCTL = WDTPW + WDTHOLD;
 
   // run @ 16MHz
@@ -134,7 +154,6 @@ int main(void) {
   UCA0CTL1 = UCSSEL_2;
 
   unsigned u16;
-  unsigned long u32;
 
   println();
 
@@ -143,6 +162,9 @@ int main(void) {
     printc(',');
     printi(u16);println();
   }
+
+#if 0
+  unsigned long u32;
 
   for(u32=2147483647ul-5; u32 <= 2147483647ul+5; u32++ ) {
     printul(u32);
@@ -156,6 +178,6 @@ int main(void) {
     printc(',');
     printi(u16);println();
   }
-
+#endif
   LPM4;
 }
