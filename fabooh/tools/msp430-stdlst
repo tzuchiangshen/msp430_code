@@ -1,0 +1,32 @@
+#!/bin/bash
+
+cmd=$(basename "$0")
+
+set -e
+
+if [ $# -ne 1 ]
+then
+  echo "error usage: ${cmd} foo.elf"
+  exit 1
+fi
+
+fullpath="$1"
+filename=$(basename "$fullpath")
+ext="${filename##*.}"
+filepart="${filename%.*}"
+
+if [ "${ext}" != "elf" -a "${ext}" != "out" ]
+then
+  echo "error expecting valid filetype: [.elf|.out] got ext=.${ext}"
+  exit 1
+fi
+
+fileobjdump="${filepart}_asm_mixed.txt"
+fileobjcopy="${filepart}.hex"
+fileobjcnts="${filepart}_asm_count.txt"
+
+msp430-objdump -dS "${fullpath}" | msp430-c++filt > "${fileobjdump}"
+msp430-readelf -x .rodata "${fullpath}" >> "${fileobjdump}" 2>/dev/null
+msp430-objcopy -O ihex "${fullpath}" "${fileobjcopy}"
+naken430util -disasm "${fileobjcopy}" > "${fileobjcnts}"
+msp430-size "${fullpath}"

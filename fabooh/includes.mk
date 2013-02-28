@@ -16,6 +16,7 @@ BOARD?=msp430g2553in20
 # user command line additional CFLAGS
 FLAGS?=
 
+MSP430_STDLST = $(FABOOH_DIR)/tools/msp430-stdlst
 MSPDEBUG = mspdebug
 CC = msp430-gcc
 
@@ -45,7 +46,7 @@ all: $(TARGET).elf
 
 $(TARGET).elf : $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(TARGET).elf $(LDLIBS)
-	msp430-stdlst $(TARGET).elf
+	$(MSP430_STDLST) $(TARGET).elf
 
 clean:
 	@echo "cleaning $(TARGET) ..."
