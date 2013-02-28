@@ -5,7 +5,7 @@ fabooh_lp430430g2231.upload.maximum_size=2048
 fabooh_lp430430g2231.build.mcu=msp430g2231
 fabooh_lp430430g2231.build.f_cpu=1000000L
 fabooh_lp430430g2231.build.core=fabooh
-fabooh_lp430430g2231.build.variant=launchpad
+fabooh_lp430430g2231.build.variant=msp430g2231in14
 
 ##############################################################
 fabooh_lp430430g2231f.name=fabooh LaunchPad w/ msp430g2231 (16MHz)
@@ -14,7 +14,7 @@ fabooh_lp430430g2231f.upload.maximum_size=2048
 fabooh_lp430430g2231f.build.mcu=msp430g2231
 fabooh_lp430430g2231f.build.f_cpu=16000000L
 fabooh_lp430430g2231f.build.core=fabooh
-fabooh_lp430430g2231f.build.variant=launchpad
+fabooh_lp430430g2231f.build.variant=msp430g2231in14
 
 ##############################################################
 fabooh_lp430430g2452.name=fabooh LaunchPad w/ msp430g2452 (16MHz)
@@ -23,7 +23,7 @@ fabooh_lp430430g2452.upload.maximum_size=8192
 fabooh_lp430430g2452.build.mcu=msp430g2452
 fabooh_lp430430g2452.build.f_cpu=16000000L
 fabooh_lp430430g2452.build.core=fabooh
-fabooh_lp430430g2452.build.variant=launchpad
+fabooh_lp430430g2452.build.variant=msp430g2453in20
 
 ##############################################################
 fabooh_lp430430g2553.name=fabooh LaunchPad w/ msp430g2553 (16MHz)
