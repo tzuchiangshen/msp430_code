@@ -23,7 +23,7 @@ fabooh_lp430430g2452.upload.maximum_size=8192
 fabooh_lp430430g2452.build.mcu=msp430g2452
 fabooh_lp430430g2452.build.f_cpu=16000000L
 fabooh_lp430430g2452.build.core=fabooh
-fabooh_lp430430g2452.build.variant=msp430g2453in20
+fabooh_lp430430g2452.build.variant=msp430g2452in20
 
 ##############################################################
 fabooh_lp430430g2553.name=fabooh LaunchPad w/ msp430g2553 (16MHz)
@@ -35,13 +35,22 @@ fabooh_lp430430g2553.build.core=fabooh
 fabooh_lp430430g2553.build.variant=msp430g2553in20
 
 ##############################################################
-fabooh_lp430430fr5739.name=fabooh FraunchPad w/ msp430fr5739
+fabooh_lp430430fr5739.name=fabooh FraunchPad w/ msp430fr5739 (8MHz)
 fabooh_lp430430fr5739.upload.protocol=rf2500
 fabooh_lp430430fr5739.upload.maximum_size=15872
 fabooh_lp430430fr5739.build.mcu=msp430fr5739
-fabooh_lp430430fr5739.build.f_cpu=16000000L
+fabooh_lp430430fr5739.build.f_cpu=8000000L
 fabooh_lp430430fr5739.build.core=fabooh
-fabooh_lp430430fr5739.build.variant=fraunchpad
+fabooh_lp430430fr5739.build.variant=msp430fr5729
+
+##############################################################
+fabooh_lp430430fr5739.name=fabooh FraunchPad w/ msp430fr5739 (24MHz)
+fabooh_lp430430fr5739.upload.protocol=rf2500
+fabooh_lp430430fr5739.upload.maximum_size=15872
+fabooh_lp430430fr5739.build.mcu=msp430fr5739
+fabooh_lp430430fr5739.build.f_cpu=24000000L
+fabooh_lp430430fr5739.build.core=fabooh
+fabooh_lp430430fr5739.build.variant=msp430fr5729
 
 ##############################################################
 # END
