@@ -33,6 +33,7 @@
 #define USE_SPI 1
 #endif
 
+// lcd::nokia::Nokai5110 {}
 namespace lcd {
 namespace nokia {
 
@@ -91,7 +92,7 @@ struct Nokia5110
 };
 
 template <typename _SCLK, typename _DIN, typename _DC, typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN, _DC,  _CE, _RST>::write(const unsigned char *cmd, unsigned len, const lcd_cmd_type type)
+void Nokia5110<_SCLK, _DIN, _DC,  _CE, _RST>::write(const unsigned char *cmd, unsigned len, const lcd_cmd_type type)
 {
     _CE::low();
 
@@ -141,7 +142,7 @@ void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::init(void)
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::vert(void)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::vert(void)
 {
     static const unsigned char v[] = {
         0x20 | 0x02,        // Function set - chip active, vertical addressing, basic instructions
@@ -151,14 +152,14 @@ void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::vert(void)
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::home(void)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::home(void)
 {
     static const unsigned char home[] = { 0x40, 0x80 };
     write(home, sizeof(home), lcd_command);
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::pos(unsigned char x, unsigned char y)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::pos(unsigned char x, unsigned char y)
 {
     unsigned char c[2];
     c[0] = 0x80 | x;
@@ -167,7 +168,7 @@ void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::pos(unsigned char x, unsigned ch
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::clear(unsigned char x)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::clear(unsigned char x)
 {
     home();
     write(&x, 504 /*84*(48/8)*/, lcd_data_repeat);
@@ -175,7 +176,7 @@ void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::clear(unsigned char x)
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::bitmap(const unsigned char *bmp, signed char x, signed char y, unsigned char w, unsigned char h)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::bitmap(const unsigned char *bmp, signed char x, signed char y, unsigned char w, unsigned char h)
 {
     unsigned char c[2];
     unsigned char ww;
@@ -298,14 +299,14 @@ static const unsigned char font[96][5] = {
 };
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::print(char c)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::print(char c)
 {
     write(&font[c - 32][0], 5);
     write(&font[0][0], 1);
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::print(const char *s)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::print(const char *s)
 {
     while(*s) {
         write(&font[*s - 32][0], 5);
@@ -315,7 +316,7 @@ void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::print(const char *s)
 }
 
 template <typename _SCLK, typename _DIN,  typename _DC,  typename _CE, unsigned _RST>
-void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::printv(unsigned char x, unsigned char y, char *s)
+void Nokia5110<_SCLK, _DIN,  _DC,  _CE, _RST>::printv(unsigned char x, unsigned char y, char *s)
 {
     while(*s) {
         pos(x, y);
@@ -325,5 +326,6 @@ void Nokia5110< _SCLK, _DIN,  _DC,  _CE, _RST>::printv(unsigned char x, unsigned
         ++s;
     }
 }
+
   } // namespace
 } // namespace
