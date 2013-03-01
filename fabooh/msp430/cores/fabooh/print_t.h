@@ -135,32 +135,6 @@ public:
   //----------------- signed --------------------------
   //
 
-//  typedef long long packed_bcd;
-
-  void print(packed_bcd bcd) {
-    unsigned hlo,lhi,llo,mask=0x0F;
-    char *digit;
-    char digits[11];
-    digit=digits;
-
-    llo = bcd & 0xFFFF;
-    lhi = bcd >> 16;
-    hlo = bcd >> 32;
-
-    *digit++ = ((hlo >> 4 ) & mask) + '0';
-    *digit++ = ((hlo >> 0 ) & mask) + '0';
-    *digit++ = ((lhi >> 12) & mask) + '0';
-    *digit++ = ((lhi >> 8 ) & mask) + '0';
-    *digit++ = ((lhi >> 4 ) & mask) + '0';
-    *digit++ = ((lhi >> 0 ) & mask) + '0';
-    *digit++ = ((llo >> 12) & mask) + '0';
-    *digit++ = ((llo >> 8 ) & mask) + '0';
-    *digit++ = ((llo >> 4 ) & mask) + '0';
-    *digit++ = ((llo >> 0 ) & mask) + '0';
-    *digit = '\0';
-    _puts(digits);
-  }
-
   void print(int8_t i, const base_e base=DEC) {
     if ( base == DEC && i < 0 ) {
       write((uint8_t)'-');
@@ -211,6 +185,9 @@ public:
       write((uint8_t)u);
   }
 
+  //----------------- specials --------------------------
+  //
+
   void print(_endl_enum) {
     println();
   }
@@ -247,12 +224,6 @@ public:
     while(*s) {
       write((uint8_t)*s++);
     }
-  }
-
-  void puth(unsigned n)
-  {
-      static const char hex[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-      write(hex[n & 15]);
   }
 
 #if 1
@@ -332,6 +303,12 @@ public:
     va_end(a);
   }
 #else
+
+  void puth(unsigned n)
+  {
+      static const char hex[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+      write(hex[n & 15]);
+  }
 
   void printf(char *format, ...)
   {
@@ -445,45 +422,5 @@ private:
    }
 
 };
-
-#if 0
-    // * too slow
-    unsigned decade_cnt = 0;
-    T t=n, decade=1;
-
-    // compute max decade
-    do {
-      t /= base;
-      decade_cnt++;
-      if ( t ) {
-        decade *= base;
-      }
-    } while ( t > 0 );
-
-    do {
-      unsigned digit = n / decade;
-
-      write(digit = digit < 10 ? digit + '0' : digit + 'A' - 10);
-      n = n % decade;
-      decade = decade/base;
-    } while( (--decade_cnt) > 0 );
-#endif
-
-#if 0
-static const unsigned long dv[] = {
-//  4294967296      // 32 bit unsigned max
-    1000000000,     // +0
-     100000000,     // +1
-      10000000,     // +2
-       1000000,     // +3
-        100000,     // +4
-//       65535      // 16 bit unsigned max
-         10000,     // +5
-          1000,     // +6
-           100,     // +7
-            10,     // +8
-             1,     // +9
-};
-#endif
 
 #endif /* PRINT_T_H_ */
