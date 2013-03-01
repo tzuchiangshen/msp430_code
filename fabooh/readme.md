@@ -1,30 +1,41 @@
 FABOOH - as in FABricate meets OOH La La
 ----------------------------------------
-o What is Fabooh?
+Fabooh is an optimized C++ template based peripheral framework for the
+msp430 microcontroller.  It creates very small and efficient code while
+still providing a flexible framework akin to what you might expect in
+Energia without needless overhead.  It makes liberal use of inline
+msp430-gcc assembler code to produce optimized code that is sometimes
+smaller than generic 'C' code.
 
-Fabooh started out as a C++ template based peripheral framework for the
-msp430 uC.  It creates very small and efficient code while still
-providing a flexible framework akin to what you might expect in Energia.
- 
-o Why do you want it?
+A typical blink program looks something like this:
 
-Typically it is used by someone who wants to do more with an msp430g2231
-than is possible with Energia. You might also want to try it out if you
-like C++ object abstraction and feel comfortable with C++ templates.
-You might even try it out if you want to see if it generates smaller code
-than your hand optimized straight 'C' code doing the same thing. You
-might be surprised at the results.  blink.elf is about 152 bytes.
-ascii_table.elf is only 468 bytes ( it uses the serial port to print
-out ASCII characters in raw, decimal, oct, hex, and binary versions ).
+[code]
+#include <fabooh.h>
+#include <main.h>
+using namespace GPIO;
 
-o Where can I get it?
+inline void setup() {
 
-https://github.com/RickKimball/msp430_code
+  RED_LED::pinMode(OUTPUT);
+  GREEN_LED::pinMode(OUTPUT);
+  PUSH2::pinMode(INPUT_PULLUP);
 
-o How much does it cost?
+  GREEN_LED::low();
+  RED_LED::high();
+}
 
-Gratis, but I'm glad to take a donation.
+void loop() {
+  
+  // block loop if user holds down the button
+  if ( !PUSH2::read() ) {
+    do {
+      delay_msecs(10); // debounce switch
+    } while(!PUSH2::read());
+  }
 
-o Where do I get support?
+  delay_msecs(100);
+  RED_LED::toggle();
+  GREEN_LED::toggle();
+}
+[/code]
 
-irc:freenode.net/#43oh
