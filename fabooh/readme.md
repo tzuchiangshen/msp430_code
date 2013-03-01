@@ -40,7 +40,7 @@ void loop() {
 </code>
 </pre>
 
-This results in very efficient code that uses only 150 bytes of flash, no data and no BSS;
+This results in very efficient code that uses only 158 bytes of flash, no data and no BSS;
 
 <pre>
 <code>
