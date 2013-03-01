@@ -8,7 +8,7 @@
  *
  * $ msp430-size ws2811_basic.elf
  *  text     data     bss     dec     hex filename
- *   308        0       0     308     134 ws2811_basic.elf
+ *   300        0       0     300     134 ws2811_basic.elf
  */
 
 #include <fabooh.h>
@@ -30,7 +30,7 @@ const uint8_t frames[][12] = {
     }
 };
 
-void setup() {
+inline void setup() {
 
   ws2811::begin();
 
@@ -38,8 +38,9 @@ void setup() {
     ws2811::write(&frames[0][0]);
     delay(300);
     ws2811::write(&frames[1][0]);
-    delay(200);
+    delay(300);
   } while (1);
+
 }
 
 void loop() {}
