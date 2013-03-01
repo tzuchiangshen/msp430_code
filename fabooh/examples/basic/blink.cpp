@@ -12,7 +12,7 @@
 
 using namespace GPIO;
 
-void setup() {
+inline void setup() {
 
   RED_LED::pinMode(OUTPUT);
   GREEN_LED::pinMode(OUTPUT);
