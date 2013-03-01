@@ -9,7 +9,8 @@ smaller than generic 'C' code.
 
 A typical blink program looks something like this:
 
-[code]
+<pre>
+<code>
 # include <fabooh.h>
 # include <main.h>
 using namespace GPIO;
@@ -37,5 +38,6 @@ void loop() {
   RED_LED::toggle();
   GREEN_LED::toggle();
 }
-[/code]
+</code>
+</pre>
 
