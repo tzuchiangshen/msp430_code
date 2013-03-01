@@ -2,7 +2,6 @@
  * blink.cpp - blink test
  *
  * Pins Used: RED_LED, GREEN_LED, PUSH2
- *
  */
 
 #include <fabooh.h>
@@ -13,18 +12,15 @@
 using namespace GPIO;
 
 inline void setup() {
-
   RED_LED::pinMode(OUTPUT);
   GREEN_LED::pinMode(OUTPUT);
-  PUSH2::setmode_inputpullup();
+  PUSH2::pinMode(INPUT_PULLUP);
 
   GREEN_LED::low();
   RED_LED::high();
-
 }
 
 void loop() {
-  
   // block loop if user holds down the button
   if ( !PUSH2::read() ) {
     do {
@@ -32,12 +28,7 @@ void loop() {
     } while(!PUSH2::read());
   }
 
+  // toggle the port as the leds are on the same one
+  RED_LED::toggle_pins(RED_LED::pin_mask|GREEN_LED::pin_mask);
   delay_msecs(100);
-  if ( 1 /* same port do both at the same time*/) {
-    RED_LED::toggle_pins(RED_LED::pin_mask|GREEN_LED::pin_mask);
-  }
-  else {
-    RED_LED::toggle();
-    GREEN_LED::toggle();
-  }
 }
