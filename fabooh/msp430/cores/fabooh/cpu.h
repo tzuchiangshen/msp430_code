@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-02-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -53,5 +53,13 @@ struct cpu_t {
 // arduino style
 #define delay(msec) __delay_cycles(CPU::msec_cycles * msec)
 #define delayMicroseconds(usec) __delay_cycles(CPU::usec_cycles * usec)
+
+#ifdef __MSP430_HAS_BC2__
+#include "drivers/cpu430.h"
+#elif __MSP430_HAS_CS__
+#include "drivers/cpu430x.h"
+#else
+#error Unsupport CPU detected!
+#endif
 
 #endif /* CPU_H_ */

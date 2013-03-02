@@ -4,7 +4,7 @@
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
  *    Date: 03-02-2013
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -42,19 +42,11 @@
 
 #include "logic.h"
 #include "ringbuffer.h"
-
 #include "cpu.h"
-
-#ifdef __MSP430_HAS_BC2__
-#include "drivers/cpu430.h"
-#else
-#include "drivers/cpu430x.h"
-#endif
-
 #include "gpio.h"
-#include <pins.h> // driven by the selected board -I ${FABOOH_CORE}/variants/${BOARD}
-
 #include "print.h"
+
+#include <pins.h> // driven by the selected board -I ${FABOOH_CORE}/variants/${BOARD}
 
 void setup();
 void loop();
