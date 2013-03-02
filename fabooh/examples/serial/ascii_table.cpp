@@ -18,7 +18,6 @@
 
 #include <fabooh.h>
 #include <serial.h>
-#include <msp430/usciserial430.h>
 
 #define NO_DATA_INIT /* 0 DATA, and thisByte is the only BSS variable we just set it in setup() */
 #define NO_BSS_INIT /* thisByte is really a BSS value, set in setup() */

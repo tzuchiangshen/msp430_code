@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-02-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -26,10 +26,7 @@
 #ifndef SERIAL_H_
 #define SERIAL_H_
 
-#include "msp430/usciserial430.h"
-
-#ifdef __GNUC__
-#include "msp430/swserial430.h"
-#endif
+#include "drivers/usciserial430.h"
+#include "drivers/swserial430.h"
 
 #endif

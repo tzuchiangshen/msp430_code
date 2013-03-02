@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-02-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -28,8 +28,11 @@
 
 #ifdef __GNUC__
 #define ALWAYS_INLINE inline __attribute__((always_inline))
+#define NEVER_INLINE __attribute__((noinline))
 #else
 #define ALWAYS_INLINE inline
+#define NEVER_INLINE
+#warning This code takes advantage of features only found in msp430-gcc!!!
 #endif
 
 #include <msp430.h>
@@ -38,19 +41,18 @@
 #include <stdlib.h>
 
 #include "logic.h"
-#ifdef __GNUC__
 #include "ringbuffer.h"
-#endif
 
 #include "cpu.h"
+
 #ifdef __MSP430_HAS_BC2__
-#include "msp430/cpu430.h"
+#include "drivers/cpu430.h"
 #else
-#include "msp430/cpu430x.h"
+#include "drivers/cpu430x.h"
 #endif
 
 #include "gpio.h"
-#include <pins.h> // source by -I ${FABOOH_CORE}/variants/${BOARD}
+#include <pins.h> // driven by the selected board -I ${FABOOH_CORE}/variants/${BOARD}
 
 #include "print.h"
 

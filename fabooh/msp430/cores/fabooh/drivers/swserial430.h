@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-02-2013
+ * Version: 1.0.1
  *
  * Acknowledgments:
  *  Inspiration for cycle counting RX/TX routines from Kevin Timmerman.
@@ -28,6 +28,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef __GNUC__
+#error msp430-gcc is required to compile this code as it using inline msp430 asm
+#endif
 
 #ifndef SWSERIAL_430_H_
 #define SWSERIAL_430_H_
