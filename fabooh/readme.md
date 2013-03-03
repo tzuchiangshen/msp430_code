@@ -11,6 +11,8 @@ Example:
 ========
 A typical blink program looks something like this:
 
+<pre>
+<code>
   #include <fabooh.h>
   #include <main.h>
   using namespace GPIO;
@@ -36,6 +38,8 @@ A typical blink program looks something like this:
     RED_LED::toggle();
     GREEN_LED::toggle();
   }
+</code>
+</pre>
 
 This results in very efficient code that uses only 158 bytes of flash, no data and no BSS;
 
