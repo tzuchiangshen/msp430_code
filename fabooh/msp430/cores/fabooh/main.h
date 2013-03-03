@@ -33,7 +33,7 @@
 
 int main(void)
 {
-#if !defined(FABOOH_VER)
+#if defined(ENERGIA)
     /* warning: optimal size reduction is achieved with -mdisable-watchdog compile time flag*/
     WDTCTL = WDTPW | WDTHOLD;
 #endif
