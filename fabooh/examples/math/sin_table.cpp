@@ -45,7 +45,7 @@ inline void setup() {
 
   Serial << "Sorry, this chip doesn't have enough flash memory to run the sin_table sample" << endl;
 
-  LPM4;
+  while(1);
 }
 
 void loop() {}

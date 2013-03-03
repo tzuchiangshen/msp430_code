@@ -36,18 +36,11 @@ struct cpu430_t {
   static void init_clock_impl(void) {
     if (MCLK_FREQ == 16000000) {
       #ifdef CALBC1_16MHZ_
-#if 1
       BCSCTL1 = CALBC1_16MHZ;
       DCOCTL = CALDCO_16MHZ;
-#else
-      __asm__("mov.b %0,%1\n" :: "m" (CALBC1_16MHZ), "m" (BCSCTL1):);
-      __asm__("mov.b %0,%1\n" :: "m" (CALDCO_16MHZ), "m" (DCOCTL):);
-      __asm__(
-          "mov #0, r15\n"
-          "mov.b 0x10f9(r15),0x0057(R15)\n"
-          "mov.b 0x10f8(r15),0x0056(R15)\n"
-          :::"r15");
-#endif
+      #else
+      BCSCTL1 = 0x8F; // TBD: provide some default values for an msp430g2231
+      DCOCTL = 0x6F;  // each chip is different and needs to be calibrated
       #endif
     }
     else if (MCLK_FREQ == 12000000) {
