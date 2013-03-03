@@ -78,7 +78,7 @@ Motivation
 I started with the msp430 when msp430-gcc didn't know about the value line chips. Most
 of the examples supplied by Texas Instruments looked like they were written by someone
 who took the asm code and just formatted it for 'C'. The small code differences required
-for TIs CCS and msp43-gcc made writing code that would run in both environments
+for TIs CCS and msp430-gcc made writing code that would run in both environments
 painful. Most people were using CCS to write code for their projects and code samples.
 I used CCS for a while but still I wanted someting better.  
 
@@ -100,9 +100,10 @@ macros.
 Fabooh tries to use compile time decisions over runtime ones. The way the GPIO class
 works assumes you know at compile time which pins and ports you want to use and
 doesn't use up any flash or ram space at runtime trying to figure that out.
-Compare that with the table look up scheme that is done are runtime with Wiring based
-frameworks. I think you will like the results with the small changes you have to make
-in your coding style to take advantage of it.
+Compare that with the table look up scheme that is done at runtime with Wiring based
+frameworks. That scheme using up time, flash and ram space that isn't in excess on
+the small msp430 value line chips.  I think you will like the results with th
+small changes you will have to make to your coding style to take advantage of fabooh.
 
 Things have changed for the better. The msp430-gcc I'm using is based on 4.5.3 gnu. It
 is fully featured and can be used with all the msp430 chips, value line chips included. 
