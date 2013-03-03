@@ -102,7 +102,7 @@ works assumes you know at compile time which pins and ports you want to use and
 doesn't use up any flash or ram space at runtime trying to figure that out.
 Compare that with the table look up scheme that is done at runtime with Wiring based
 frameworks. That scheme using up time, flash and ram space that isn't in excess on
-the small msp430 value line chips.  I think you will like the results with th
+the small msp430 value line chips.  I think you will like the results with the
 small changes you will have to make to your coding style to take advantage of fabooh.
 
 Things have changed for the better. The msp430-gcc I'm using is based on 4.5.3 gnu. It
