@@ -1,5 +1,5 @@
 /**
- * ascii_table_extended.cpp - spew ASCII table print insertion operators
+ * ascii_table_extended.ino - ASCII table print using insertion operator style
  *
  * Author: rick@kimballsoftware.com
  * Date: 03-03-2013
@@ -13,6 +13,9 @@
 #include <serial.h>
 #include "main.h"
 
+/*
+ * use serial_base_sw_t so it works with all boards without change
+ */
 template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
 struct serial_t:
   serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
@@ -24,28 +27,25 @@ struct serial_t:
 namespace {
   const uint32_t BAUD_RATE=9600;
   typedef serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial;
-  typedef print_t<serial> Print;
 
   serial Serial;
   unsigned thisByte=' '; // first visible ASCIIcharacter ' ' is number 32:
 }
 
-#include "ascii_table_extended.h"
-
 inline void setup(void)
 {
-  // initialize serial port pins. Note: speed is ignored here just for documentation
-  // change the baud rate in the template definition
+  // initialize serial port pins.
+  // Note: BAUD_RATE is ignored by begin. It is provided just
+  // for informational purposes. You should change the baud
+  // rate in the template definition
   Serial.begin(BAUD_RATE);
 
   // prints title with ending line break
-  Serial.print("ASCII Table ~ Character Map\n");
+  Serial << "ASCII Table ~ Character Map" << endl;
 }
 
 void loop()
 {
-
-  // use insertion operator style
   Serial  << _RAW(thisByte)
           << ", dec: " << thisByte
           << ", oct: 0" << _OCT(thisByte)

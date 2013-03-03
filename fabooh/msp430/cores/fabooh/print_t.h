@@ -423,4 +423,31 @@ private:
 
 };
 
+/*
+ * print_t insertion operator support
+ */
+template<typename PRINT_T, typename T>
+inline PRINT_T &operator << (PRINT_T &obj, T arg) {
+  obj.print(arg); return obj;
+}
+
+template<typename T>
+struct _BASE {
+  const T n;
+  const base_e base;
+
+  _BASE(const T _n, const base_e _base): n(_n), base(_base) {}
+};
+
+#define _RAW(n) _BASE<typeof((n))>(n,RAW)
+#define _BIN(n) _BASE<typeof((n))>(n,BIN)
+#define _OCT(n) _BASE<typeof((n))>(n,OCT)
+#define _DEC(n) _BASE<typeof((n))>(n,DEC)
+#define _HEX(n) _BASE<typeof((n))>(n,HEX)
+
+template<typename PRINT_T, typename T>
+inline PRINT_T &operator << (PRINT_T &obj, const _BASE<T> &arg) {
+  obj.print(arg.n, arg.base); return obj;
+}
+
 #endif /* PRINT_T_H_ */

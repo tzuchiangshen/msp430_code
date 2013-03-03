@@ -10,6 +10,8 @@ all:
 	@make -C examples/lcd all
 	@make -C examples/math all
 	@make -C examples/serial all
+	@make -C examples/energia_ide_examples/blink all
+	@make -C examples/energia_ide_examples/serial/ascii_table_extended all
 
 clean:
 	@make -C examples/basic clean
@@ -17,4 +19,6 @@ clean:
 	@make -C examples/lcd clean
 	@make -C examples/math clean
 	@make -C examples/serial clean
+	@make -C examples/energia_ide_examples/blink clean
+	@make -C examples/energia_ide_examples/serial/ascii_table_extended clean
 	

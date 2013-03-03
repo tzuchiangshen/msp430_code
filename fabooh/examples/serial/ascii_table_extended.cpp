@@ -32,36 +32,10 @@ namespace {
   unsigned thisByte; // first visible ASCIIcharacter ' ' is number 32:
 }
 
-typedef print_t<serial> Print;
-
-/*
- * print_t insertion operator support
- */
-template<typename T>
-inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
-
-template<typename T>
-struct _BASE {
-  const T n;
-  const base_e base;
-
-  _BASE(const T _n, const base_e _base): n(_n), base(_base) {}
-};
-
-#define _RAW(n) _BASE<typeof((n))>(n,RAW)
-#define _BIN(n) _BASE<typeof((n))>(n,BIN)
-#define _OCT(n) _BASE<typeof((n))>(n,OCT)
-#define _DEC(n) _BASE<typeof((n))>(n,DEC)
-#define _HEX(n) _BASE<typeof((n))>(n,HEX)
-
-template<typename T>
-inline Print &operator <<(Print &obj, const _BASE<T> &arg) { obj.print(arg.n, arg.base); return obj; }
-
 inline void setup(void)
 {
   thisByte=' '; // first visible ASCIIcharacter ' ' is number 32:
-  // initialize serial port pins. Note: speed is ignored here just for documentation
-  // change the baud rate in the template definition
+
   Serial.begin(BAUD_RATE);
 
   // prints title with ending line break
