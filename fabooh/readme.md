@@ -68,7 +68,8 @@ To build and install the blink example using the defaults (msp430g2553):
 Credits
 -------
 
-o Many chunks of code have be used from various open source projects.
-o Inspiration has come from Energia, Arduino.
-o big chunks of Kevin Timmerman's msp430 CCS code has been lifted and ported to msp430-gcc
+* Many chunks of code have be used from various open source projects.
+* Much inspiration has come from the Energia and Arduino API
+* Big chunks of Kevin Timmerman's (oPossum) msp430 CCS code has been lifted and ported to msp430-gcc
+* Robert Wessels' msp430 code provided insight into how to best use the msp430 peripherals
 
