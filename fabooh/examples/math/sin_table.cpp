@@ -1,10 +1,11 @@
 /**
- * sin_table.cpp - using configurable print_t template
+ * sin_table.cpp - print a table of angles and sine
  *
- * 11956 bytes .. hmm pretty useless
+ * $ msp430-size sin_table.elf
+ *   text    data     bss     dec     hex filename
+ *  11960       0       0   11960    2eb8 sin_table.elf
  *
  * TBD: implement CORDIC floating point routines
- *
  */
 
 #include <fabooh.h>
@@ -33,11 +34,24 @@ struct serial_t:
 namespace {
   const uint32_t BAUD_RATE = 9600;
   typedef serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial; /* TX=P?.? varies, RX=NO_PIN */
-  typedef print_t<serial> Print;
   serial Serial;
 };
 
-#if !defined(__MSP430G2231__)
+#if defined(__MSP430G2231__) || defined(__MPS430G2452__)
+
+inline void setup() {
+
+  Serial.begin(BAUD_RATE);
+
+  Serial << "Sorry, this chip doesn't have enough flash memory to run the sin_table sample" << endl;
+
+  LPM4;
+}
+
+void loop() {}
+
+#else
+
 float deg2rad(float deg) {
   return (deg * M_PI) / 180.0f;
 }
@@ -48,31 +62,18 @@ inline void setup() {
 
 void loop() {
   unsigned angle;
-  float sin_value;
+  float f, sin_value;
 
-  Serial.print("Table of Sin(a)\n");
+  Serial << "Table of Sin(a)" << endl;
 
   for (angle = 0; angle < 360; angle++) {
-    float a = (float) angle;
-    sin_value = sinf(deg2rad(a));
-    Serial.print("angle="); Serial.print(angle);
-    Serial.print(" sin="); Serial.print(sin_value, 5);
-    Serial.println();
+    f = (float)angle;
+    sin_value = sinf(deg2rad(f));
+
+    Serial << "angle=" << angle << " sin=" << _FLOAT(sin_value,5) << endl;
   }
 
   LPM4; // stop here when done., press reset button to see again
 }
-
-#else
-
-inline void setup() {
-
-  Serial.begin(BAUD_RATE);
-
-  Serial.print("Sorry, the msp430g2231 doesn't have enough flash memory to run sin_table sample\n");
-  LPM4;
-}
-
-void loop() {}
 
 #endif

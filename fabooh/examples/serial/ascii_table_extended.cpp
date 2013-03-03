@@ -11,7 +11,7 @@
 
 #define NO_DATA_INIT
 #define NO_BSS_INIT
-#include "main.h"
+#include <main.h>
 
 template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
 struct serial_t:

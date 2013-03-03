@@ -345,11 +345,19 @@ private:
 
 /*
  * print_t insertion operator support
+ *
+ * similar and mostly based on ideas in:
+ *  http://arduiniana.org/libraries/streaming/
  */
+
+// Serial << 1234; // print ascii decimal version of 1234
+
 template<typename PRINT_T, typename T>
 inline PRINT_T &operator << (PRINT_T &obj, T arg) {
   obj.print(arg); return obj;
 }
+
+//   Serial << _HEX(1234); // print ascii hex version of decimal 1234
 
 template<typename T>
 struct _BASE {
@@ -368,6 +376,24 @@ struct _BASE {
 template<typename PRINT_T, typename T>
 inline PRINT_T &operator << (PRINT_T &obj, const _BASE<T> &arg) {
   obj.print(arg.n, arg.base); return obj;
+}
+
+//   Serial << _FLOAT(gps_latitude, 6); // 6 digits of precision
+
+template<typename T>
+struct _FBASE
+{
+  const T val;
+  const unsigned digits;
+
+  _FBASE(const T v, const unsigned d): val(v), digits(d) {}
+};
+
+#define _FLOAT(f,d) _FBASE<float>((f),(d))
+
+template<typename PRINT_T, typename T>
+inline PRINT_T &operator <<(PRINT_T &obj, const _FBASE<T> &arg) {
+  obj.print(arg.val, arg.digits); return obj;
 }
 
 #endif /* PRINT_T_H_ */
