@@ -13,8 +13,8 @@ A typical blink program looks something like this:
 
 <pre>
 <code>
-  #include <fabooh.h>
-  #include <main.h>
+  #include &lt;fabooh.h>
+  #include &lt;main.h>
   using namespace GPIO;
   
   inline void setup() {
@@ -41,5 +41,19 @@ A typical blink program looks something like this:
 </code>
 </pre>
 
-This results in very efficient code that uses only 158 bytes of flash, no data and no BSS;
+This results in very efficient code that uses only 158 bytes of flash, and no DATA or BSS space.
+
+Usage
+-----
+
+To build all examples:
+<pre>
+ $ make clean all 
+</pre>
+
+To build and install the blink example using the defaults (msp430g2553):
+<pre>
+ $ cd examples 
+ $ make clean all install
+</pre>
 
