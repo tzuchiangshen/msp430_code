@@ -3,8 +3,8 @@
  *
  * Created: Nov 20, 2012
  *  Author: rick@kimballsoftware.com
- *    Date: 11-20-2012
- * Version: 1.0.0
+ *    Date: 03-02-2012
+ * Version: 1.0.1
  *
  * Note: this file a work in progress ...
  *
@@ -53,9 +53,6 @@
  typedef GPIO_PIN<BIT6,P1> P1_6;
  typedef GPIO_PIN<BIT7,P1> P1_7;
 
- typedef GPIO_PIN<BIT0,P1> RED_LED;
- typedef GPIO_PIN<BIT6,P1> GREEN_LED;
- typedef GPIO_PIN<BIT3,P1> PUSH2;
 
 #endif
 
@@ -85,12 +82,13 @@
  typedef GPIO_PIN<BIT6,P2> P2_6;
  typedef GPIO_PIN<BIT7,P2> P2_7;
 
+
 #endif
 
  /*
   * P3 port and P3.X shorthand typedefs
   */
- #ifdef __MSP430_HAS_PORT3_R__
+#ifdef __MSP430_HAS_PORT3_R__
  typedef GPIO_PORT<
          PBIN_L
          ,PBOUT_L
@@ -107,10 +105,83 @@
  typedef GPIO_PIN<BIT1,P3> P3_1;
  typedef GPIO_PIN<BIT2,P3> P3_2;
  typedef GPIO_PIN<BIT3,P3> P3_3;
- typedef GPIO_PIN<BIT4,P3> P3_4; // SMCLK
+ typedef GPIO_PIN<BIT4,P3> P3_4;
  typedef GPIO_PIN<BIT5,P3> P3_5;
  typedef GPIO_PIN<BIT6,P3> P3_6;
  typedef GPIO_PIN<BIT7,P3> P3_7;
 
- #endif
+#endif
+
+ /*
+  * P4 port and P4.X shorthand typedefs
+  */
+#ifdef __MSP430_HAS_PORT4_R__
+ typedef GPIO_PORT<
+         PBIN_H
+         ,PBOUT_H
+         ,PBDIR_H
+         ,PBIFG_H
+         ,PBIES_H
+         ,PBIE_H
+         ,PBSEL0_H
+         ,PBSEL1_H
+         ,PBREN_H
+         > P4;
+
+ typedef GPIO_PIN<BIT0,P4> P4_0;
+ typedef GPIO_PIN<BIT1,P4> P4_1;
+
+#endif
+
+ /*
+  * PJ port and PJ.X shorthand typedefs
+  */
+#ifdef __MSP430_HAS_PORTJ_R__
+ typedef GPIO_PORT_NOIE<
+         PJIN_L
+         ,PJOUT_L
+         ,PJDIR_L
+         ,PJSEL0_L
+         ,PJSEL1_L
+         ,PJREN_L
+         > PJ;
+
+ typedef GPIO_PIN<BIT0,PJ> PJ_0;
+ typedef GPIO_PIN<BIT1,PJ> PJ_1;
+ typedef GPIO_PIN<BIT2,PJ> PJ_2;
+ typedef GPIO_PIN<BIT3,PJ> PJ_3;
+ typedef GPIO_PIN<BIT4,PJ> PJ_4;
+ typedef GPIO_PIN<BIT5,PJ> PJ_5;
+
+#endif
+
+#ifdef __MSP430_HAS_PORTJ_R__
+ typedef PJ_0 RED_LED;
+ typedef PJ_1 GREEN_LED;
+
+ typedef PJ_0 LED1;
+ typedef PJ_1 LED2;
+ typedef PJ_2 LED3;
+ typedef PJ_3 LED4;
+#endif
+
+#ifdef __MSP430_HAS_PORT3_R__
+ typedef P3_4 LED5;
+ typedef P3_5 LED6;
+ typedef P3_6 LED7;
+ typedef P3_7 LED8;
+#endif
+
+#ifdef __MSP430_HAS_PORT4_R__
+ typedef P4_0 PUSH1;
+ typedef P4_1 PUSH2;
+#endif
+
+ typedef P2_0 TX_PIN;
+ typedef P2_1 RX_PIN;
+
+ typedef P2_2 SCLK;
+ typedef P1_6 MOSI;
+ typedef P1_7 MIS0;
+
 #endif /* MSP430FR5739_NOBOARD_H_ */

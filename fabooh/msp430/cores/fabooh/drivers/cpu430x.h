@@ -3,8 +3,8 @@
  *
  * Created: Dec 12, 2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-02-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -57,7 +57,7 @@ struct cpu430x_t {
 #else
 #warning F_CPU is not a know frequency value
 #endif
-      P3DIR |= BIT4; P3SEL0 |= BIT4; P3SEL1 |= BIT4;
+      //P3DIR |= BIT4; P3SEL0 |= BIT4; P3SEL1 |= BIT4;
 
   }
 };

@@ -41,11 +41,7 @@ struct serial_t:
 namespace {
 
   const uint32_t BAUD_RATE=9600;
-#if defined(__MSP430_HAS_USCI__)
-  serial_t<BAUD_RATE, CPU::frequency, P1_2 /*P2_0*/, NO_PIN> Serial; // xmit only serial TX=P1.2
-#else
-  serial_t<BAUD_RATE, CPU::frequency, P1_1 /*P2_0*/, NO_PIN> Serial; // xmit only serial TX=P1.2
-#endif
+  serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> Serial; // xmit only serial
 
 #if defined(NO_DATA_INIT)
   counter_t thisByte; // use less code by initializing in setup()

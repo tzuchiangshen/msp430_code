@@ -9,19 +9,23 @@
  */
 
 #include <fabooh.h>
-#define USE_SPI 1
-#include <drivers/nokia_5110.h>
 #include <main.h>
+
+#define USE_SPI 0
+#include <drivers/nokia_5110.h>
 
 #include "bitmaps/lp_logo.inc"
 
 typedef P1_0 LCD_DC;
 typedef P1_4 LCD_CE;
-typedef P1_5 SCLK;
-typedef P1_7 SDI;
+//typedef P1_5 SCLK; // varies depending on the board selected
+typedef MOSI SDI;    // varies depending on the board selected
 typedef P1_6 LCD_BACKLIGHT;
 
 inline void init_spi(void) {
+  LCD_CE::setmode_output();
+  LCD_CE::high(); // active low, so this disables
+
 #if defined(USE_SPI) && USE_SPI
   #define SPI_MODE_0 (UCCKPH)           /* CPOL=0 CPHA=0 */
   #define SPI_MODE_1 (0)                /* CPOL=0 CPHA=1 */
@@ -36,18 +40,20 @@ inline void init_spi(void) {
   UCB0BR1 = 0;
   UCB0CTL1 &= ~UCSWRST;                           // release USCI for operation
 #else
-  P1::set_mode(SCLK::pin_mask|SDI::pin_mask, GPIO::OUTPUT);
+  SCLK::setmode_output();
+  SDI::setmode_output();
   SCLK::high();
 #endif
 }
 
 void setup() {
-  P1::set_mode(LCD_CE::pin_mask | LCD_DC::pin_mask | LCD_BACKLIGHT::pin_mask, GPIO::OUTPUT);
-  P1::set_pins(LCD_DC::pin_mask | LCD_CE::pin_mask);
+  LCD_DC::setmode_output();
+  LCD_BACKLIGHT::setmode_output();
+  LCD_DC::high();
 
   init_spi();
 
-  lcd::nokia::Nokia5110<P1_5, P1_7, P1_0, P1_4, 100> lcd;
+  lcd::nokia::Nokia5110<SCLK, SDI, LCD_DC, LCD_CE, 100> lcd;
 
   lcd.reset();
   lcd.init();

@@ -4,7 +4,7 @@
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
  *    Date: 03-02-2013
- * Version: 1.0.1
+ * Version: 1.0.3
  *
  * Acknowledgments:
  *  Inspiration for cycle counting RX/TX routines from Kevin Timmerman.
@@ -76,8 +76,8 @@ struct serial_base_sw_t {
    */
   void end() {
       // no need to flush, we do all the work
-      TXPIN::set_low();
-      TXPIN::pinMode(GPIO::INPUT);
+      TXPIN::low();
+      TXPIN::setmode_input();
   }
 
   /*

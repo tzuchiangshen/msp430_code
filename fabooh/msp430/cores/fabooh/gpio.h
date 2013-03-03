@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-02-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -64,6 +64,69 @@ struct GPIO_PORT {
     static u8_SFR PIFG()  { return pifg; }
     static u8_SFR PIES()  { return pies; }
     static u8_SFR PIE()   { return pie; }
+    static u8_SFR PSEL()  { return psel; }
+    static u8_SFR PSEL2() { return psel2; }
+    static u8_SFR PREN()  { return pren; }
+
+    /**
+     * pin direction configuration methods
+     */
+    ALWAYS_INLINE static void set_mode(uint8_t mask, GPIO::pin_mode mode) {
+      if ( 0 ) {
+      }
+      else if (mode == GPIO::OUTPUT ) {
+        setmode_output(mask);
+      }
+      else if ( mode == GPIO::INPUT ) {
+        setmode_input(mask);
+      }
+      else if (mode == GPIO::INPUT_PULLUP) {
+          setmode_inputpullup(mask);
+      }
+      else if (mode == GPIO::INPUT_PULLDOWN) {
+          setmode_inputpulldown(mask);
+      }
+    }
+
+    ALWAYS_INLINE static void setmode_input(uint8_t mask) { pdir &= ~mask; }
+
+    ALWAYS_INLINE static void setmode_inputpullup(uint8_t mask) {
+      pdir &= ~mask; set_pins(mask); pren |= mask;
+    }
+
+    ALWAYS_INLINE static void setmode_inputpulldown(uint8_t mask) {
+      pdir &= ~mask;  clear_pins(mask); pren |= mask;
+    }
+
+    ALWAYS_INLINE static void setmode_output(uint8_t mask ) { pdir |= mask; }
+
+    /*
+     * get/set methods
+     */
+    ALWAYS_INLINE static void set_value(uint8_t value) { pout = value; }
+    ALWAYS_INLINE static uint8_t get_value() { return pin; }
+
+    ALWAYS_INLINE static void set_pins(uint8_t pin_mask) { pout |= pin_mask; }
+    ALWAYS_INLINE static void clear_pins(uint8_t pin_mask) { pout &= ~pin_mask; }
+    ALWAYS_INLINE static void toggle_pins(uint8_t pin_mask) { pout ^= pin_mask; }
+};
+
+/*
+ * GPIO_PORT_NOIE<> - no interrupt port template
+ *
+ */
+template <
+     u8_CSFR pin
+    ,u8_SFR pout
+    ,u8_SFR pdir
+    ,u8_SFR psel
+    ,u8_SFR psel2
+    ,u8_SFR pren
+>
+struct GPIO_PORT_NOIE {
+    static u8_CSFR PIN()  { return pin;  }
+    static u8_SFR POUT()  { return pout; }
+    static u8_SFR PDIR()  { return pdir; }
     static u8_SFR PSEL()  { return psel; }
     static u8_SFR PSEL2() { return psel2; }
     static u8_SFR PREN()  { return pren; }
@@ -212,10 +275,10 @@ struct DummyGPIO {
     struct {
         uint16_t PIN() { return 0; }
         uint16_t POUT() { return 0; }
+        uint16_t PSEL() { return 0; }
+        uint16_t PREN() { return 0; }
+        uint16_t PSEL2() { return 0; }
         uint8_t PINMASK() { return 0; }
-        uint8_t PSEL() { return 0; }
-        uint8_t PREN() { return 0; }
-        uint8_t PSEL2() { return 0; }
     } port;
     static const uint8_t pin_mask=0;
 

@@ -3,8 +3,8 @@
  *
  * Created: Nov 20, 2012
  *  Author: rick@kimballsoftware.com
- *    Date: 11-20-2012
- * Version: 1.0.0
+ *    Date: 03-02-2012
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -26,10 +26,6 @@
 
 #ifndef MSP430G2553_NOBOARD_H_
 #define MSP430G2553_NOBOARD_H_
-
-#ifndef F_CPU
- #define F_CPU 16000000
-#endif
 
 /*
  * P1 port and P1.X shorthand typedefs
@@ -60,6 +56,11 @@
  typedef GPIO_PIN<BIT0,P1> RED_LED;
  typedef GPIO_PIN<BIT6,P1> GREEN_LED;
  typedef GPIO_PIN<BIT3,P1> PUSH2;
+ typedef P1_1 RX_PIN;
+ typedef P1_2 TX_PIN;
+ typedef P1_5 SCLK;
+ typedef P1_7 MOSI;
+ typedef P1_6 MISO;
 
 #endif
 

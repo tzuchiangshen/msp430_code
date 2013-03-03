@@ -1,17 +1,20 @@
 #
 # includes.mk - common include used by fabooh example makefiles
 #
-#    Date: 02-28-2013
-# Version: 1.0.0
+# Created: Feb 28, 2012
+#  Author: rick@kimballsoftware.com
+#    Date: 03-02-2012
+# Version: 1.0.1
 #
 
-FABOOH_DIR?=../..
-FABOOH_TLD?=$(FABOOH_DIR)/msp430
+SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-CORE?=fabooh
-MCU?=msp430g2553
-F_CPU?=16000000
-BOARD?=msp430g2553in20
+FABOOH_DIR?=$(patsubst %/,%,$(SELF_DIR))
+FABOOH_PLATFORM?=$(FABOOH_DIR)/msp430
+
+#include $(FABOOH_DIR)/include-msp430g2231in14.mk
+include $(FABOOH_DIR)/include-msp430g2553in20.mk
+#include $(FABOOH_DIR)/include-msp430fr5729.mk
 
 # user command line additional CFLAGS
 FLAGS?=
@@ -20,9 +23,9 @@ MSP430_STDLST = $(FABOOH_DIR)/tools/msp430-stdlst
 MSPDEBUG = mspdebug
 CC = msp430-gcc
 
-INCLUDE=-I $(FABOOH_TLD)/cores/$(CORE) \
-		-I $(FABOOH_TLD)/variants/$(BOARD) \
-		-I $(FABOOH_TLD)/cores/$(CORE)/drivers
+INCLUDE=-I $(FABOOH_PLATFORM)/cores/$(CORE) \
+		-I $(FABOOH_PLATFORM)/variants/$(BOARD) \
+		-I $(FABOOH_PLATFORM)/cores/$(CORE)/drivers
 
 # -flto -fwhole-program -fwrapv -fomit-frame-pointer \
 
