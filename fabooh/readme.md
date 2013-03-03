@@ -46,10 +46,10 @@ This results in very efficient code that uses only 158 bytes of flash, and no DA
 Dependencies
 ------------
 
-fabooh needs the msp430-gcc version 4.6.3 or above. You can get a prebuilt binary mps430-gcc
+fabooh needs msp430-gcc version 4.6.3 or above. You can get a prebuilt mps430-gcc
 binary for windows, OSX, or linux by downloading the Energia IDE ( http://energia.nu/downloads )
-Energia is not required to use fabooh. However, some people find its build environment easy to
-get started
+Energia is not required to use fabooh. However, some people do find its build environment easy
+to use.
 
 Usage
 -----
@@ -72,4 +72,5 @@ Credits
 * Much inspiration has come from the Energia and Arduino API
 * Big chunks of Kevin Timmerman's (oPossum) msp430 CCS code has been lifted and ported to msp430-gcc
 * Robert Wessels' msp430 code provided insight into how to best use the msp430 peripherals
-* http://mbed.org/users/igorsk/notebook/fast-gpio-with-c-templates/ this got me thinking about using C++ to speed up GPIO access
+* This post http://mbed.org/users/igorsk/notebook/fast-gpio-with-c-templates/ got me thinking about
+using C++ to provide a reasonable API without sacrificing speed and small code size.
