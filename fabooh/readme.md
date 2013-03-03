@@ -53,7 +53,7 @@ To build all examples:
 
 To build and install the blink example using the defaults (msp430g2553):
 <pre>
- $ cd examples 
+ $ cd examples/basic 
  $ make clean all install
 </pre>
 
