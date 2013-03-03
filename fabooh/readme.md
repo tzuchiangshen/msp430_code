@@ -84,10 +84,11 @@ I used CCS for a while but still I wanted someting better.
 
 I really wanted a simple to use API. I wanted to be able to share code and have others
 use my code. I liked the idea of Arduino API but the implemention isn't really focused
-on small or efficient code.  I then started to contribute my time to the Energia port
-of Arduino that runs on the msp430. I like it and we did try to be as efficient as we
-could be within the confines of the Arduino framework.  One of the biggest thing we
-accomplished was to get a larger number of people using msp430-gcc.
+on small or efficient code.  Around that time I started to contribute my time to the
+Energia project which is a port Arduino that runs on the msp430. I like it and we do
+try to be as efficient as we could be within the confines of the Arduino framework.
+One of the biggest things we accomplished was to get a larger number of people
+using msp430-gcc.
 
 This code is my attempt to retain the goodness of the Energia framework while trying
 to be as fast and effcient as I can be without worrying about breaking the Arduino
