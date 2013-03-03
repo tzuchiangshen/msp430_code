@@ -29,9 +29,9 @@ A typical blink program looks something like this:
   void loop() {
     // block loop if user holds down the button
     if ( !PUSH2::read() ) {
-    do {
-    delay_msecs(10); // debounce switch
-    } while(!PUSH2::read());
+      do {
+        delay_msecs(10); // debounce switch
+      } while(!PUSH2::read());
     }
     
     delay_msecs(100);
@@ -72,4 +72,4 @@ Credits
 * Much inspiration has come from the Energia and Arduino API
 * Big chunks of Kevin Timmerman's (oPossum) msp430 CCS code has been lifted and ported to msp430-gcc
 * Robert Wessels' msp430 code provided insight into how to best use the msp430 peripherals
-
+* http://mbed.org/users/igorsk/notebook/fast-gpio-with-c-templates/ this got me thinking about using C++ to speed up GPIO access
