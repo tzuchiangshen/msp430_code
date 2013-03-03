@@ -1,4 +1,4 @@
-FABOOH - as in FABricate meets OOH La La
+FABOOH - as in FABricate meets OOH la la
 ========================================
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
@@ -7,38 +7,36 @@ Energia without needless overhead.  It makes liberal use of inline
 msp430-gcc assembler code to produce optimized code that is sometimes
 smaller than generic 'C' code.
 
-Example:
-========
+Example
+-------
 A typical blink program looks something like this:
 
 <pre>
-<code>
-  #include &lt;fabooh.h>
-  #include &lt;main.h>
-  using namespace GPIO;
+<code>#include &lt;fabooh.h>
+#include &lt;main.h>
+using namespace GPIO;
+
+inline void setup() {
+  RED_LED::pinMode(OUTPUT);
+  GREEN_LED::pinMode(OUTPUT);
+  PUSH2::pinMode(INPUT_PULLUP);
   
-  inline void setup() {
-    RED_LED::pinMode(OUTPUT);
-    GREEN_LED::pinMode(OUTPUT);
-    PUSH2::pinMode(INPUT_PULLUP);
-    
-    GREEN_LED::low();
-    RED_LED::high();
+  GREEN_LED::low();
+  RED_LED::high();
+}
+
+void loop() {
+  // block loop if user holds down the button
+  if ( !PUSH2::read() ) {
+    do {
+      delay_msecs(10); // debounce switch
+    } while(!PUSH2::read());
   }
   
-  void loop() {
-    // block loop if user holds down the button
-    if ( !PUSH2::read() ) {
-      do {
-        delay_msecs(10); // debounce switch
-      } while(!PUSH2::read());
-    }
-    
-    delay_msecs(100);
-    RED_LED::toggle();
-    GREEN_LED::toggle();
-  }
-</code>
+  delay_msecs(100);
+  RED_LED::toggle();
+  GREEN_LED::toggle();
+}</code>
 </pre>
 
 This results in very efficient code that uses only 158 bytes of flash, and no DATA or BSS space.
@@ -74,3 +72,11 @@ Credits
 * Robert Wessels' msp430 code provided insight into how to best use the msp430 peripherals
 * This post http://mbed.org/users/igorsk/notebook/fast-gpio-with-c-templates/ got me thinking about
 using C++ to provide a reasonable API without sacrificing speed and small code size.
+
+Motivation
+----------
+TBD
+
+History
+-------
+TBD
