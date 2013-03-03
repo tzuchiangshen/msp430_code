@@ -5,8 +5,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-03-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -204,31 +204,11 @@ public:
     return _printFloat(f, decimal_places);
   }
 
-  void xtoa(unsigned long x, const unsigned long *dp)
-  {
-      char c;
-      unsigned long d;
-      if(x) {
-          while(x < *dp) ++dp;
-          do {
-              d = *dp++;
-              c = '0';
-              while(x >= d) ++c, x -= d;
-              write(c);
-          } while(!(d & 1));
-      } else
-          write('0');
-  }
-
-  void puts(char *s) {
-    while(*s) {
-      write((uint8_t)*s++);
-    }
-  }
-
-#if 1
   /*
-   * printf() - you probably don't want to use this either
+   * printf() - you probably don't want to use this either if you care about code size
+   *
+   * minimal printf() implementation based on implementation from Kevin Timmermans's
+   * tiny printf see: http://forum.43oh.com/topic/1289-tiny-printf-c-version/
    */
 
   void printf(const char *format, ...) {
@@ -272,7 +252,7 @@ public:
           case 0:
             return;
 
-  #if 0
+  #if 0 // you could enable these if you have lots of flash space
           case 'b':
             print((uint16_t)va_arg(a, uint16_t),BIN);
             break;
@@ -302,61 +282,6 @@ public:
     }
     va_end(a);
   }
-#else
-
-  void puth(unsigned n)
-  {
-      static const char hex[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-      write(hex[n & 15]);
-  }
-
-  void printf(char *format, ...)
-  {
-      char c;
-      int i;
-      long n;
-
-      va_list a;
-      va_start(a, format);
-      while((c = *format++)) {
-          if(c == '%') {
-              switch(c = *format++) {
-                  case 's':                       // String
-                      puts(va_arg(a, char*));
-                      break;
-                  case 'c':                       // Char
-                      write(va_arg(a, int));
-                      break;
-                  case 'i':                       // 16 bit Integer
-                  case 'u':                       // 16 bit Unsigned
-                      i = va_arg(a, int);
-                      if(c == 'i' && i < 0) i = -i, write('-');
-                      xtoa((unsigned)i, dv + 5);
-                      break;
-                  case 'l':                       // 32 bit Long
-                  case 'n':                       // 32 bit uNsigned loNg
-                      n = va_arg(a, long);
-                      if(c == 'l' &&  n < 0) n = -n, write('-');
-                      xtoa((unsigned long)n, dv);
-                      break;
-                  case 'x':                       // 16 bit heXadecimal
-                      i = va_arg(a, int);
-                      puth(i >> 12);
-                      puth(i >> 8);
-                      puth(i >> 4);
-                      puth(i);
-                      break;
-                  case 0: return;
-                  default: goto bad_fmt;
-              }
-          } else
-  bad_fmt:    write(c);
-      }
-      va_end(a);
-  }
-
-
-#endif
 
   /*
    * write - write 1 byte character
@@ -368,13 +293,8 @@ public:
     return static_cast<Writer*>(this)->write_impl(c);
   }
 
-  /*__attribute__ ((always_inline)) */
-  /*__attribute__ ((noinline)) */
-
   /* TBD: avoided println(n) functions to discourage usage, as they causes bloat */
   /* TBD: work out a scheme to allow specialization of _print_base method */
-  /* TBD: add some iomanip<> style features such as setw() and setfill() */
-  /* TBD: add some ios_base fmtflags */
 
 
 private:
