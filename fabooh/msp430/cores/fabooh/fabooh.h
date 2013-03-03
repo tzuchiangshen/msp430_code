@@ -26,6 +26,9 @@
 #ifndef FABOOH_H_
 #define FABOOH_H_
 
+#define FABOOH_VER 0x0100
+#define FABOOH_BLD 0x0002
+
 #ifdef __GNUC__
 #define ALWAYS_INLINE inline __attribute__((always_inline))
 #define NEVER_INLINE __attribute__((noinline))

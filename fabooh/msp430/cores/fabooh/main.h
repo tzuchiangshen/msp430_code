@@ -33,7 +33,8 @@
 
 int main(void)
 {
-#if !defined(__GNUC__) /* warning: you must compile with -mdisable-watchdog */
+#if !defined(FABOOH_VER)
+    /* warning: optimal size reduction is achieved with -mdisable-watchdog compile time flag*/
     WDTCTL = WDTPW | WDTHOLD;
 #endif
 
