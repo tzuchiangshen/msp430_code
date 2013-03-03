@@ -1,10 +1,10 @@
 /*
- *  cpu430.h - msp430 BCS+ implementation
+ *  cpu430x.h - msp430x cpu using CS clock implementation (msp430fr57xxx)
  *
  * Created: Dec 12, 2012
  *  Author: rick@kimballsoftware.com
  *    Date: 03-02-2013
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -35,30 +35,29 @@ template <unsigned long FREQ=F_CPU>
 struct cpu430x_t {
 	static const unsigned long MCLK_FREQ=FREQ;
 
-  static void init_clock_impl(void) {
-    CSCTL0 = CSKEY;                // Enable Access to CS Registers
+	static void init_clock_impl(void) {
 
+	  CSCTL0 = CSKEY;                // Enable Access to CS Registers
     CSCTL2 &= ~SELM_7;             // Clear selected Main CLK Source
     CSCTL2 |= SELM__DCOCLK;        // Use DCO as Main Clock Source
     CSCTL3 &= ~(DIVM_3 | DIVS_3);  // clear DIVM Bits
 
 #if F_CPU == 24000000L
-    CSCTL1 = DCOFSEL0 | DCOFSEL1 | DCORSEL;    //Level 2 / Range 1 : 24.0MHz
+    CSCTL1 = DCOFSEL0 | DCOFSEL1 | DCORSEL; // Level 2 / Range 1 : 24.0MHz
 #elif F_CPU == 16000000L
-      CSCTL1 = DCORSEL;              //Level 0 / Range 1 : 16.0MHz
+    CSCTL1 = DCORSEL;                       // Level 0 / Range 1 : 16.0MHz
 #elif F_CPU == 12000000L
-      CSCTL1 = DCOFSEL0 | DCOFSEL1 | DCORSEL;    //Level 2 / Range 1 : 24.0MHz
-      CSCTL3 |= DIVM_1;              // Div = 2
+    CSCTL1 = DCOFSEL0 | DCOFSEL1 | DCORSEL; // Level 2 / Range 1 : 24.0MHz
+    CSCTL3 |= DIVM_1;                       // Div = 2
 #elif F_CPU == 8000000L
-      CSCTL1 = DCOFSEL0 | DCOFSEL1;  //Level 2 / Range 0 : 8.0MHz
+    CSCTL1 = DCOFSEL0 | DCOFSEL1;           // Level 2 / Range 0 : 8.0MHz
 #elif F_CPU == 1000000L
-      CSCTL1 = DCOFSEL0 | DCOFSEL1;  //Level 2 / Range 0 : 8.0MHz
-      CSCTL3 |= DIVM_3;              // Div = 8
+    CSCTL1 = DCOFSEL0 | DCOFSEL1;           // Level 2 / Range 0 : 8.0MHz
+    CSCTL3 |= DIVM_3;                       // Div = 8
 #else
 #warning F_CPU is not a know frequency value
 #endif
-      //P3DIR |= BIT4; P3SEL0 |= BIT4; P3SEL1 |= BIT4;
-
+      //P3DIR |= BIT4; P3SEL0 |= BIT4; P3SEL1 |= BIT4; /* clockout */
   }
 };
 

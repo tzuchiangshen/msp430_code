@@ -4,7 +4,7 @@
 # Created: Feb 28, 2012
 #  Author: rick@kimballsoftware.com
 #    Date: 03-02-2012
-# Version: 1.0.1
+# Version: 1.0.2
 #
 
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
@@ -14,7 +14,7 @@ FABOOH_PLATFORM?=$(FABOOH_DIR)/msp430
 
 #include $(FABOOH_DIR)/include-msp430g2231in14.mk
 include $(FABOOH_DIR)/include-msp430g2553in20.mk
-#include $(FABOOH_DIR)/include-msp430fr5729.mk
+#include $(FABOOH_DIR)/include-msp430fr5739.mk
 
 # user command line additional CFLAGS
 FLAGS?=

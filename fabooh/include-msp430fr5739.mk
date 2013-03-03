@@ -1,0 +1,5 @@
+CORE?=fabooh
+MCU?=msp430fr5739
+F_CPU?=24000000
+BOARD?=msp430fr5739
+
