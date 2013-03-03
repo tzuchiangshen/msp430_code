@@ -1,12 +1,12 @@
 /*
-  * pins.h - msp430g2231 GPIO port and pins
+  * pins.h - msp430fr5739 GPIO port and pins
  *
  * Created: Nov 20, 2012
  *  Author: rick@kimballsoftware.com
  *    Date: 03-02-2012
- * Version: 1.0.1
+ * Version: 1.0.2
  *
- * Note: this file a work in progress ...
+ * Note: this file is a work in progress don't expect it to be final ...
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -53,7 +53,6 @@
  typedef GPIO_PIN<BIT6,P1> P1_6;
  typedef GPIO_PIN<BIT7,P1> P1_7;
 
-
 #endif
 
 /*
@@ -81,7 +80,6 @@
  typedef GPIO_PIN<BIT5,P2> P2_5;
  typedef GPIO_PIN<BIT6,P2> P2_6;
  typedef GPIO_PIN<BIT7,P2> P2_7;
-
 
 #endif
 
