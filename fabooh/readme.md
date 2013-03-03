@@ -1,5 +1,5 @@
 FABOOH - as in FABricate meets OOH La La
-----------------------------------------
+========================================
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
 still providing a flexible framework akin to what you might expect in
@@ -7,6 +7,8 @@ Energia without needless overhead.  It makes liberal use of inline
 msp430-gcc assembler code to produce optimized code that is sometimes
 smaller than generic 'C' code.
 
+Example:
+========
 A typical blink program looks something like this:
 
 <pre>
