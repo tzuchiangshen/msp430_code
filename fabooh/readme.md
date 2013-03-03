@@ -82,8 +82,8 @@ for TIs CCS and msp430-gcc made writing code that would run in both environments
 painful. Most people were using CCS to write code for their projects and code samples.
 I used CCS for a while but still I wanted someting better.  
 
-I really wanted a simple to use API. I wanted to be able to share code and have others
-use my code. I liked the idea of Arduino API but the implemention isn't really focused
+I really wanted a simple to use API. I wanted to be able to share my code and to use other
+peoples code. I liked the idea of Arduino API but the implemention isn't really focused
 on small or efficient code.  Around that time I started to contribute my time to the
 Energia project which is a port Arduino that runs on the msp430. I like it and we do
 try to be as efficient as we could be within the confines of the Arduino framework.
