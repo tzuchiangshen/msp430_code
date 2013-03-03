@@ -76,23 +76,30 @@ using C++ to provide a reasonable API without sacrificing speed and small code s
 Motivation
 ----------
 I started with the msp430 when msp430-gcc didn't know about the value line chips. Most
-of the examples supplied by Texas Instruments look like they were written by someone
-took the asm code and just formatted it for 'C'. The differences between TIs CCS
-and gcc were a pain. Most people were using CCS to write code and provide better
-samples.  Still I wanted someting better.  
+of the examples supplied by Texas Instruments looked like they were written by someone
+who took the asm code and just formatted it for 'C'. The small code differences required
+for TIs CCS and msp43-gcc made writing code that would run in both environments
+painful. Most people were using CCS to write code for their projects and code samples.
+I used CCS for a while but still I wanted someting better.  
 
-I really wanted a simple to use API. I liked the idea of Arduino API but the implemention
-isn't really focused on small code or efficiency.  I contribute my time to the Energia
-port of Arduino that runs on the msp430. I like it and we did try to be as efficient
-as we could be within the confines of the Arduino framework
+I really wanted a simple to use API. I wanted to be able to share code and have others
+use my code. I liked the idea of Arduino API but the implemention isn't really focused
+on small or efficient code.  I then started to contribute my time to the Energia port
+of Arduino that runs on the msp430. I like it and we did try to be as efficient as we
+could be within the confines of the Arduino framework.  One of the biggest thing we
+accomplished was to get a larger number of people using msp430-gcc.
 
 This code is my attempt to retain the goodness of the Energia framework while trying
 to be as fast and effcient as I can be without worrying about breaking the Arduino
-API.  The code makes frequent use of msp430-gcc ability to inline msp430 asm. If you
-look at the implementation of the software only serial code, I don't know how you 
-would do that in straight 'C'.  I try to use compile time decisions over runtime ones.
-The way the GPIO class works assumes you know at compile time which pins and ports
-you want to use and doesn't use up any space at runtime trying to figure that out.
+API.  The code makes frequent use of msp430-gcc's ability to inline msp430 asm. If you
+look at the implementation of the software only serial code in the drivers directory,
+you will see some very tight asm code that can use any combination of ports and pins.
+I don't know how you would do that in straight 'C' without some really convoluted
+macros.
+
+Fabooh tries to use compile time decisions over runtime ones. The way the GPIO class
+works assumes you know at compile time which pins and ports you want to use and
+doesn't use up any flash or ram space at runtime trying to figure that out.
 Compare that with the table look up scheme that is done are runtime with Wiring based
 frameworks. I think you will like the results with the small changes you have to make
 in your coding style to take advantage of it.
