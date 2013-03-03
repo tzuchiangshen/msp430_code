@@ -43,6 +43,14 @@ A typical blink program looks something like this:
 
 This results in very efficient code that uses only 158 bytes of flash, and no DATA or BSS space.
 
+Dependencies
+------------
+
+fabooh needs the msp430-gcc version 4.6.3 or above. You can get a prebuilt binary mps430-gcc
+binary for windows, OSX, or linux by downloading the Energia IDE ( http://energia.nu/downloads )
+Energia is not required to use fabooh. However, some people find its build environment easy to
+get started
+
 Usage
 -----
 
@@ -56,4 +64,11 @@ To build and install the blink example using the defaults (msp430g2553):
  $ cd examples/basic 
  $ make clean all install
 </pre>
+
+Credits
+-------
+
+o Many chunks of code have be used from various open source projects.
+o Inspiration has come from Energia, Arduino.
+o big chunks of Kevin Timmerman's msp430 CCS code has been lifted and ported to msp430-gcc
 
