@@ -1,4 +1,4 @@
-FABOOH - as in FABricate meets OOH la la
+FABOOH - as in FABricate meets OOH nice
 ========================================
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
