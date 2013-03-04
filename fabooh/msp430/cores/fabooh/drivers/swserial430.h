@@ -111,25 +111,25 @@ void serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>::_write(register unsigned c) 
     c |= 0x300; // add stop bits
 
     __asm__ volatile (
-            "   jmp     3f                   ; Send start bit...\n"
+            "   jmp     3f                   ; Send start bit... (2)\n"
             "1:                              ;\n"
-            "   mov     %[bit_dur],%[cnt]    ; Get bit duration\n"
+            "   mov     %[bit_dur],%[cnt]    ; cycles Get bit duration (1)\n"
             "2:                              ;\n"
-            "   nop                          ; 4 cycle loop\n"
-            "   sub     #8, %[cnt]           ;\n"
-            "   jc      2b                   ;\n"
-            "   subc    %[cnt], r0           ; 0 to 3 cycle delay\n"
+            "   nop                          ; 4 cycles loop (1)\n"
+            "   sub     #8, %[cnt]           ; (1)\n"
+            "   jc      2b                   ; (2)\n"
+            "   subc    %[cnt], r0           ; 0 to 3 cycle delay (4)\n"
             "   nop                          ; 3\n"
             "   nop                          ; 2\n"
             "   nop                          ; 1\n"
-            "   rra     %[c]                 ; Get bit to tx, test for zero\n"
-            "   jc      4f                   ; If high...\n"
+            "   rra     %[c]                 ; Get bit to tx, test for zero (1)\n"
+            "   jc      4f                   ; If high... (2)\n"
             "3:                              ;\n"
-            "   bic.b   %[mask],%[PXOUT]     ; Send zero bit\n"
-            "   jmp     1b                   ; Next bit...\n"
+            "   bic.b   %[mask],%[PXOUT]     ; Send zero bit (2)\n"
+            "   jmp     1b                   ; Next bit...(2)\n"
             "4:                              ;\n"
-            "   bis.b   %[mask], %[PXOUT]    ; Send one bit\n"
-            "   jnz     1b                   ; If tx data is not zero, then there are more bits to send...\n"
+            "   bis.b   %[mask], %[PXOUT]    ; Send one bit (2)\n"
+            "   jnz     1b                   ; If tx data is not zero, then there are more bits to send...(2)\n"
 
             : /* return value */
             [c] "+r" (c),
