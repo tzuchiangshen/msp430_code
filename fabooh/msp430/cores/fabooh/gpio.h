@@ -73,7 +73,7 @@ struct GPIO_PORT_BASE {
     /**
      * pin direction configuration methods
      */
-    ALWAYS_INLINE static void set_mode(uint8_t mask, pin_mode mode) {
+    ALWAYS_INLINE static void set_mode(const uint8_t mask, pin_mode mode) {
       if ( 0 ) {
       }
       else if (mode == OUTPUT ) {
@@ -90,26 +90,26 @@ struct GPIO_PORT_BASE {
       }
     }
 
-    ALWAYS_INLINE static void setmode_input(uint8_t mask) {
+    ALWAYS_INLINE static void setmode_input(const uint8_t mask) {
       pdir &= ~mask;
     }
 
-    ALWAYS_INLINE static void setmode_inputpullup(uint8_t mask) {
+    ALWAYS_INLINE static void setmode_inputpullup(const uint8_t mask) {
       pdir &= ~mask; set_pins(mask); pren |= mask;
     }
 
-    ALWAYS_INLINE static void setmode_inputpulldown(uint8_t mask) {
+    ALWAYS_INLINE static void setmode_inputpulldown(const uint8_t mask) {
       pdir &= ~mask;  clear_pins(mask); pren |= mask;
     }
 
-    ALWAYS_INLINE static void setmode_output(uint8_t mask ) {
+    ALWAYS_INLINE static void setmode_output(const uint8_t mask ) {
       pdir |= mask;
     }
 
     /*
      * port wide (8bits) get/set methods
      */
-    ALWAYS_INLINE static void set_value(uint8_t value) {
+    ALWAYS_INLINE static void set_value(const uint8_t value) {
       pout = value;
     }
 
@@ -117,15 +117,15 @@ struct GPIO_PORT_BASE {
       return pin;
     }
 
-    ALWAYS_INLINE static void set_pins(uint8_t pin_mask) {
+    ALWAYS_INLINE static void set_pins(const uint8_t pin_mask) {
       pout |= pin_mask;
     }
 
-    ALWAYS_INLINE static void clear_pins(uint8_t pin_mask) {
+    ALWAYS_INLINE static void clear_pins(const uint8_t pin_mask) {
       pout &= ~pin_mask;
     }
 
-    ALWAYS_INLINE static void toggle_pins(uint8_t pin_mask) {
+    ALWAYS_INLINE static void toggle_pins(const uint8_t pin_mask) {
       pout ^= pin_mask;
     }
 
