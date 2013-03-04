@@ -9,6 +9,7 @@ smaller than generic 'C' code.
 
 Example
 -------
+
 A typical blink program looks something like this:
 
 <pre>
@@ -66,7 +67,6 @@ To build and install the blink example using the defaults (msp430g2553):
 Credits
 -------
 
-* Many chunks of code have be used from various open source projects.
 * Much inspiration has come from the Energia and Arduino API
 * Big chunks of Kevin Timmerman's (oPossum) msp430 CCS code has been lifted and ported to msp430-gcc
 * Robert Wessels' msp430 code provided insight into how to best use the msp430 peripherals
@@ -75,6 +75,7 @@ using C++ to provide a reasonable API without sacrificing speed and small code s
 
 Motivation
 ----------
+
 I started with the msp430 when msp430-gcc didn't know about the value line chips. Most
 of the examples supplied by Texas Instruments looked like they were written by someone
 who took the asm code and just formatted it for 'C'. The small code differences required
@@ -117,6 +118,14 @@ result is fabooh.
 
 Support
 -------
+
 I'm often on irc.freenode.net in #43oh or #energia channel http://webchat.freenode.net/
 
 Constructive comments welcome.
+
+Warnings
+--------
+
+This code is very much in a alpha state. None of the APIs are stable. I'm adding and changing
+things around every day.  However, I'll try never to leave the branch in an unstable state.
+You should always be able to build and test whatever is checked in.
