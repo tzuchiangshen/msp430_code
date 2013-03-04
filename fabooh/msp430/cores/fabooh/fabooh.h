@@ -51,7 +51,9 @@
 
 #include <pins.h> // driven by the selected board -I ${FABOOH_CORE}/variants/${BOARD}
 
-void setup();
-void loop();
+ALWAYS_INLINE
+void setup(void);
+ALWAYS_INLINE
+void loop(void);
 
 #endif /* FABOOH_H_ */

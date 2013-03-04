@@ -9,7 +9,7 @@
 #define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>
 
-inline void setup() {
+void setup() {
   RED_LED::pinMode(OUTPUT);
   GREEN_LED::pinMode(OUTPUT);
   PUSH2::pinMode(INPUT_PULLUP);
