@@ -3,7 +3,7 @@ FABOOH - as in FABricate meets OOH nice
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
 still providing a flexible framework akin to what you might expect in
-Energia with minimal overhead.  It makes liberal use of inline
+something like Energia with minimal overhead.  It makes liberal use of inline
 msp430-gcc assembler code to produce optimized code that is sometimes
 smaller than generic 'C' code.
 
@@ -83,37 +83,42 @@ painful. Most people were using CCS to write code for their projects and code sa
 I used CCS for a while but still I wanted someting better.  
 
 I really wanted a simple to use API. I wanted to be able to share my code and to use other
-peoples code. I liked the idea of Arduino API but the implemention isn't really focused
+peoples code. I liked the idea of the Arduino API but the implemention isn't really focused
 on small or efficient code.  Around that time I started to contribute my time to the
 Energia project which is a port Arduino that runs on the msp430. I like it and we do
-try to be as efficient as we could be within the confines of the Arduino framework.
+try to be as efficient as we can be within the confines of the Arduino framework.
 One of the biggest things we accomplished was to get a larger number of people
 using msp430-gcc.
 
 This code is my attempt to retain the goodness of the Energia framework while trying
 to be as fast and effcient as I can be without worrying about breaking the Arduino
 API.  The code makes frequent use of msp430-gcc's ability to inline msp430 asm. If you
-look at the implementation of the software only serial code in the drivers directory,
-you will see some very tight asm code that can use any combination of ports and pins.
-I don't know how you would do that in straight 'C' without some really convoluted
-macros.
+look at the fabooh implementation of the software only serial code in the drivers
+directory, you will see some very tight asm code that can use any combination of
+ports and pins. I don't know how you would do that in straight 'C' and msp430 asm
+without some really convoluted macros.
 
-Fabooh tries to use compile time decisions over runtime ones. The way the GPIO class
-works assumes you know at compile time which pins and ports you want to use and
-doesn't use up any flash or ram space at runtime trying to figure that out.
-Compare that with the table look up scheme that is done at runtime with Wiring based
-frameworks. That scheme using up time, flash and ram space that isn't in excess on
-the small msp430 value line chips.  I think you will like the results with the
-small changes you will have to make to your coding style to take advantage of fabooh.
+Fabooh tries to use compile time decisions over runtime ones. The way the gpio
+class templates work assumes you know at compile time which pins and ports you
+want to use and the code doesn't end up using any flash or ram space at runtime
+trying to figure that out.
 
-Things have changed for the better. The msp430-gcc I'm using is based on 4.5.3 gnu. It
-is fully featured and can be used with all the msp430 chips, value line chips included. 
-Energia is being widely used so getting a working msp430-gcc is not really a problem.
+Constrast that with the table look up scheme that is done at runtime with Arduino based
+frameworks. The Arduino scheme uses up time, flash and ram space that isn't in excess on
+the small msp430 value line chips.  I think you will like the results achieved with the
+minor changes you will have to make to your coding style to take advantage of fabooh.
 
-With all that being said, it seemed that is was time to see if I can take advantage
-of all that compiler infrastructure and make better use of it. 
+At this point in the msp430 lifecycle mamy things have changed for the better. The
+msp430-gcc I'm using is based on 4.5.3 gnu. It is fully featured and can be used
+with all the msp430 chips, value line chips included. Energia is being widely used
+so getting a working msp430-gcc is not really a problem.
+
+With all that being said, it seemed that now sis was time to see if I can take
+advantage of all that compiler infrastructure and make better use of it. The
+result is fabooh.
 
 Support
 -------
-I'm often on irc.freenode.net in #43oh  http://webchat.freenode.net/ #43oh  Constructive
-comments welcome.
+I'm often on irc.freenode.net in #43oh or #energia channel http://webchat.freenode.net/
+
+Constructive comments welcome.
