@@ -1,11 +1,16 @@
-FABOOH - as in FABricate meets OOH La La
-----------------------------------------
+FABOOH - \ˈfab-ü\ 
+=================
+
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
 still providing a flexible framework akin to what you might expect in
-Energia without needless overhead.  It makes liberal use of inline
+something like Energia with minimal overhead.  It makes liberal use of inline
 msp430-gcc assembler code to produce optimized code that is sometimes
 smaller than generic 'C' code.
+
+
+Example
+-------
 
 A typical blink program looks something like this:
 
@@ -15,179 +20,117 @@ A typical blink program looks something like this:
 using namespace GPIO;
 
 inline void setup() {
-
   RED_LED::pinMode(OUTPUT);
   GREEN_LED::pinMode(OUTPUT);
   PUSH2::pinMode(INPUT_PULLUP);
-
+  
   GREEN_LED::low();
   RED_LED::high();
 }
 
 void loop() {
-  
   // block loop if user holds down the button
   if ( !PUSH2::read() ) {
     do {
       delay_msecs(10); // debounce switch
     } while(!PUSH2::read());
   }
-
+  
   delay_msecs(100);
   RED_LED::toggle();
   GREEN_LED::toggle();
-}
-</code>
+}</code>
 </pre>
 
-This results in very efficient code that uses only 158 bytes of flash, no data and no BSS;
+This results in very efficient code that uses only 158 bytes of flash, and no DATA or BSS space.
 
+Dependencies
+------------
+
+fabooh needs msp430-gcc version 4.6.3 or above. You can get a prebuilt mps430-gcc
+binary for windows, OSX, or linux by downloading the Energia IDE ( http://energia.nu/downloads )
+Energia is not required to use fabooh. However, some people do find its build environment easy
+to use.
+
+Usage
+-----
+
+To build all examples:
 <pre>
-<code>
-
-blink.elf:     file format elf32-msp430
-
-
-Disassembly of section .text:
-
-0000c000 <__watchdog_support>:
-    c000:  b2 40 80 5a 	mov	#23168,	&0x0120	;#0x5a80
-    c004:	20 01 
-
-0000c006 <__init_stack>:
-    c006:	31 40 00 04 	mov	#1024,	r1	;#0x0400
-
-0000c00a <__do_clear_bss>:
-    void __do_clear_bss(void) __attribute__((section(".init4"),naked));
-    void __do_clear_bss() {
-      __asm__(
-          "\n"
-          //"nop; empty __do_clear_bss() {} \n" // someplace to put a breakpoint
-          );
-    c00a:	d2 42 f9 10 	mov.b	&0x10f9,&0x0057	
-    c00e:	57 00 
-    c010:	d2 42 f8 10 	mov.b	&0x10f8,&0x0056	
-    c014:	56 00 
-    c016:	b0 12 2a c0 	call	#0xc02a	
-    c01a:	b0 12 4e c0 	call	#0xc04e	
-    c01e:	fd 3f       	jmp	$-4      	;abs 0xc01a
-
-0000c020 <__stop_progExec__>:
-    c020:	32 d0 f0 00 	bis	#240,	r2	;#0x00f0
-    c024:	fd 3f       	jmp	$-4      	;abs 0xc020
-
-0000c026 <__ctors_end>:
-    c026:	30 40 7c c0 	br	#0xc07c	
-
-0000c02a <setup()>:
-      PORT::PDIR() &= ~MASK;
-      low();
-      PORT::PREN() |= MASK;
-    }
-
-    ALWAYS_INLINE static void setmode_output() { PORT::PDIR() |= MASK; }
-    c02a:	d2 d3 22 00 	bis.b	#1,	&0x0022	;r3 As==01
-    c02e:	f2 d0 40 00 	bis.b	#64,	&0x0022	;#0x0040
-    c032:	22 00 
-    static u8_SFR PREN()  { return PORT::PREN(); }
-
-    ALWAYS_INLINE static void setmode_input() { PORT::PDIR() &= ~MASK; }
-
-    ALWAYS_INLINE static void setmode_inputpullup() {
-      PORT::PDIR() &= ~MASK;
-    c034:	f2 f0 f7 ff 	and.b	#-9,	&0x0022	;#0xfff7
-    c038:	22 00 
-        else if (mode == GPIO::INPUT_PULLDOWN) {
-            setmode_inputpulldown();
-        }
-    }
-
-    ALWAYS_INLINE static void high() { if ( MASK ) PORT::POUT() |= MASK; }
-    c03a:	f2 d2 21 00 	bis.b	#8,	&0x0021	;r2 As==11
-    ALWAYS_INLINE static void setmode_input() { PORT::PDIR() &= ~MASK; }
-
-    ALWAYS_INLINE static void setmode_inputpullup() {
-      PORT::PDIR() &= ~MASK;
-      high();
-      PORT::PREN() |= MASK;
-    c03e:	f2 d2 27 00 	bis.b	#8,	&0x0027	;r2 As==11
-            setmode_inputpulldown();
-        }
-    }
-
-    ALWAYS_INLINE static void high() { if ( MASK ) PORT::POUT() |= MASK; }
-    ALWAYS_INLINE static void low() { if ( MASK ) PORT::POUT() &= ~MASK; }
-    c042:	f2 f0 bf ff 	and.b	#-65,	&0x0021	;#0xffbf
-    c046:	21 00 
-        else if (mode == GPIO::INPUT_PULLDOWN) {
-            setmode_inputpulldown();
-        }
-    }
-
-    ALWAYS_INLINE static void high() { if ( MASK ) PORT::POUT() |= MASK; }
-    c048:	d2 d3 21 00 	bis.b	#1,	&0x0021	;r3 As==01
-  PUSH2::setmode_inputpullup();
-
-  GREEN_LED::low();
-  RED_LED::high();
-
-}
-    c04c:	30 41       	ret			
-
-0000c04e <loop()>:
-    ALWAYS_INLINE static void low() { if ( MASK ) PORT::POUT() &= ~MASK; }
-    ALWAYS_INLINE static void toggle() { if ( MASK) PORT::POUT() ^= MASK; }
-
-    ALWAYS_INLINE static unsigned read() { return (PORT::PIN() & MASK ) != 0; }
-    c04e:	5f 42 20 00 	mov.b	&0x0020,r15	
-    c052:	3f f2       	and	#8,	r15	;r2 As==11
-
-void loop() {
-  
-  // block loop if user holds down the button
-  if ( !PUSH2::read() ) {
-    c054:	07 20       	jnz	$+16     	;abs 0xc064
-    do {
-      delay_msecs(10); // debounce switch
-    c056:	3f 40 54 d0 	mov	#-12204,r15	;#0xd054
-    c05a:	1f 83       	dec	r15		
-    c05c:	fe 23       	jnz	$-2      	;abs 0xc05a
-    c05e:	03 43       	nop			
-    c060:	03 43       	nop			
-    c062:	f5 3f       	jmp	$-20     	;abs 0xc04e
-    } while(!PUSH2::read());
-  }
-
-  delay_msecs(100);
-    c064:	3e 40 09 00 	mov	#9,	r14	;#0x0009
-    c068:	3f 40 4b 23 	mov	#9035,	r15	;#0x234b
-    c06c:	1f 83       	dec	r15		
-    c06e:	fe 23       	jnz	$-2      	;abs 0xc06c
-    c070:	1e 83       	dec	r14		
-    c072:	fc 23       	jnz	$-6      	;abs 0xc06c
-        }
-    }
-
-    ALWAYS_INLINE static void set_pins(const uint8_t pins_mask) { PORT::POUT() |= pins_mask; }
-    ALWAYS_INLINE static void clear_pins(const uint8_t pins_mask) { PORT::POUT() &= ~pins_mask; }
-    ALWAYS_INLINE static void toggle_pins(const uint8_t pins_mask) { PORT::POUT() ^= pins_mask; }
-    c074:	f2 e0 41 00 	xor.b	#65,	&0x0021	;#0x0041
-    c078:	21 00 
-  }
-  else {
-    RED_LED::toggle();
-    GREEN_LED::toggle();
-  }
-}
-    c07a:	30 41       	ret			
-
-0000c07c <_unexpected_>:
-    c07c:	00 13       	reti			
-
-Disassembly of section .vectors:
-
-0000ffe0 <__ivtbl_16>:
-    ffe0:	26 c0 26 c0 26 c0 26 c0 26 c0 26 c0 26 c0 26 c0     &.&.&.&.&.&.&.&.
-    fff0:	26 c0 26 c0 26 c0 26 c0 26 c0 26 c0 26 c0 00 c0     &.&.&.&.&.&.&...
-</code>
+ $ make clean all 
 </pre>
+
+To build and install the blink example using the defaults (msp430g2553):
+<pre>
+ $ cd examples/basic 
+ $ make clean all install
+</pre>
+
+Credits
+-------
+
+* Much inspiration has come from the Energia and Arduino API
+* Big chunks of Kevin Timmerman's (oPossum) msp430 CCS code has been lifted and ported to msp430-gcc
+* Robert Wessels' msp430 code provided insight into how to best use the msp430 peripherals
+* This post http://mbed.org/users/igorsk/notebook/fast-gpio-with-c-templates/ got me thinking about
+using C++ to provide a reasonable API without sacrificing speed and small code size.
+
+Motivation
+----------
+
+FABricate (construct, manufacture; specifically : to construct from diverse and usually standardized parts) +
+OOH (to exclaim in amazement)
+
+I started with the msp430 when msp430-gcc didn't know about the value line chips. Most
+of the examples supplied by Texas Instruments looked like they were written by someone
+who took the asm code and just formatted it for 'C'. The small code differences required
+for TIs CCS and msp430-gcc made writing code that would run in both environments
+painful. Most people were using CCS to write code for their projects and code samples.
+I used CCS for a while but still I wanted someting better.  
+
+I really wanted a simple to use API. I wanted to be able to share my code and to use other
+peoples code. I liked the idea of the Arduino API but the implemention isn't really focused
+on small or efficient code.  Around that time I started to contribute my time to the
+Energia project which is a port Arduino that runs on the msp430. I like it and we do
+try to be as efficient as we can be within the confines of the Arduino framework.
+One of the biggest things we accomplished was to get a larger number of people
+using msp430-gcc.
+
+This code is my attempt to retain the goodness of the Energia framework while trying
+to be as fast and efficient as I can be without worrying about breaking the Arduino
+API.  The code makes frequent use of msp430-gcc's ability to inline msp430 asm. If you
+look at the fabooh implementation of the software only serial code in the drivers
+directory, you will see some very tight asm code that can use any combination of
+ports and pins. I don't know how you would do that in straight 'C' and msp430 asm
+without some really convoluted macros.
+
+Fabooh tries to use compile time decisions over runtime ones. The way the gpio
+class templates work assumes you know at compile time which pins and ports you
+want to use and the code doesn't end up using any flash or ram space at runtime
+trying to figure that out. Constrast that with the table look up scheme that is done at runtime with Arduino based
+frameworks. The Arduino scheme uses up time, flash and ram space that isn't in excess on
+the small msp430 value line chips.  I think you will like the results achieved with the
+minor changes you will have to make to your coding style to take advantage of fabooh.
+
+At this point in the msp430 lifecycle mamy things have changed for the better. The
+msp430-gcc I'm using is based on 4.6.3 gnu. It is fully featured and can be used
+with all the msp430 chips, value line chips included. Energia is being widely used
+so getting a working msp430-gcc is not really a problem.
+
+With all that being said, it seemed that now is the time to see if I can take
+advantage of all that compiler infrastructure and make better use of it. The
+result is fabooh.
+
+Support
+-------
+
+I'm often on irc.freenode.net in #43oh or #energia channel http://webchat.freenode.net/
+
+Constructive comments welcome.
+
+Warnings
+--------
+
+This code is very much in a alpha state. None of the APIs are stable. I'm adding and changing
+things around every day.  However, I'll try never to leave the branch in an unstable state.
+You should always be able to build and test whatever is checked in.
