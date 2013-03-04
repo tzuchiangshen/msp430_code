@@ -101,9 +101,7 @@ without some really convoluted macros.
 Fabooh tries to use compile time decisions over runtime ones. The way the gpio
 class templates work assumes you know at compile time which pins and ports you
 want to use and the code doesn't end up using any flash or ram space at runtime
-trying to figure that out.
-
-Constrast that with the table look up scheme that is done at runtime with Arduino based
+trying to figure that out. Constrast that with the table look up scheme that is done at runtime with Arduino based
 frameworks. The Arduino scheme uses up time, flash and ram space that isn't in excess on
 the small msp430 value line chips.  I think you will like the results achieved with the
 minor changes you will have to make to your coding style to take advantage of fabooh.
@@ -113,7 +111,7 @@ msp430-gcc I'm using is based on 4.5.3 gnu. It is fully featured and can be used
 with all the msp430 chips, value line chips included. Energia is being widely used
 so getting a working msp430-gcc is not really a problem.
 
-With all that being said, it seemed that now sis was time to see if I can take
+With all that being said, it seemed that now is the time to see if I can take
 advantage of all that compiler infrastructure and make better use of it. The
 result is fabooh.
 
