@@ -1,11 +1,13 @@
-FABOOH - as in FABricate meets OOH nice
-========================================
+FABOOH - \ˈfab-ü\ 
+=================
+
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
 still providing a flexible framework akin to what you might expect in
 something like Energia with minimal overhead.  It makes liberal use of inline
 msp430-gcc assembler code to produce optimized code that is sometimes
 smaller than generic 'C' code.
+
 
 Example
 -------
@@ -76,6 +78,9 @@ using C++ to provide a reasonable API without sacrificing speed and small code s
 Motivation
 ----------
 
+FABricate (construct, manufacture; specifically : to construct from diverse and usually standardized parts) +
+OOH (to exclaim in amazement)
+
 I started with the msp430 when msp430-gcc didn't know about the value line chips. Most
 of the examples supplied by Texas Instruments looked like they were written by someone
 who took the asm code and just formatted it for 'C'. The small code differences required
@@ -92,7 +97,7 @@ One of the biggest things we accomplished was to get a larger number of people
 using msp430-gcc.
 
 This code is my attempt to retain the goodness of the Energia framework while trying
-to be as fast and effcient as I can be without worrying about breaking the Arduino
+to be as fast and efficient as I can be without worrying about breaking the Arduino
 API.  The code makes frequent use of msp430-gcc's ability to inline msp430 asm. If you
 look at the fabooh implementation of the software only serial code in the drivers
 directory, you will see some very tight asm code that can use any combination of
