@@ -17,7 +17,6 @@ A typical blink program looks something like this:
 <pre>
 <code>#include &lt;fabooh.h>
 #include &lt;main.h>
-using namespace GPIO;
 
 inline void setup() {
   RED_LED::pinMode(OUTPUT);
