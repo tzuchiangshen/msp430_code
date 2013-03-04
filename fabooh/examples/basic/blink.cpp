@@ -9,8 +9,6 @@
 #define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>
 
-using namespace GPIO;
-
 inline void setup() {
   RED_LED::pinMode(OUTPUT);
   GREEN_LED::pinMode(OUTPUT);
@@ -24,7 +22,7 @@ void loop() {
   // block loop if user holds down the button
   if ( !PUSH2::read() ) {
     do {
-      delay_msecs(10); // debounce switch
+      delay_msecs(10); // debounce the button
     } while(!PUSH2::read());
   }
 

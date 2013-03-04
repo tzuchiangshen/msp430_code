@@ -3,8 +3,8 @@
  *
  * Created: Nov 20, 2012
  *  Author: rick@kimballsoftware.com
- *    Date: 03-02-2012
- * Version: 1.0.2
+ *    Date: 03-04-2012
+ * Version: 1.0.3
  *
  * Note: this file is a work in progress don't expect it to be final ...
  *
@@ -135,7 +135,7 @@
   * PJ port and PJ.X shorthand typedefs
   */
 #ifdef __MSP430_HAS_PORTJ_R__
- typedef GPIO_PORT_NOIE<
+ typedef GPIO_PORT_BASE<
          PJIN_L
          ,PJOUT_L
          ,PJDIR_L

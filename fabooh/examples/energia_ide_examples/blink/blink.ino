@@ -8,8 +8,6 @@
 #define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>
 
-using namespace GPIO;
-
 void setup() {
 
   RED_LED::pinMode(OUTPUT);
@@ -30,13 +28,8 @@ void loop() {
     } while(!PUSH2::read());
   }
 
-  if ( 1 /* same port do both at the same time*/) {
-    RED_LED::toggle_pins(RED_LED::pin_mask|GREEN_LED::pin_mask);
-  }
-  else {
-    RED_LED::toggle();
-    GREEN_LED::toggle();
-  }
+  RED_LED::toggle();
+  GREEN_LED::toggle();
+
   delay_msecs(500);
 }
-
