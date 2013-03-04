@@ -107,7 +107,7 @@ the small msp430 value line chips.  I think you will like the results achieved w
 minor changes you will have to make to your coding style to take advantage of fabooh.
 
 At this point in the msp430 lifecycle mamy things have changed for the better. The
-msp430-gcc I'm using is based on 4.5.3 gnu. It is fully featured and can be used
+msp430-gcc I'm using is based on 4.6.3 gnu. It is fully featured and can be used
 with all the msp430 chips, value line chips included. Energia is being widely used
 so getting a working msp430-gcc is not really a problem.
 
