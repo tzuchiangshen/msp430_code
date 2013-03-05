@@ -1,3 +1,7 @@
+Update ... base on this http://forum.43oh.com/topic/3460-is-it-just-me-or-tonight-ti-doubled-launchpad-price/?p=30523 ... 
+I may just focus on another chip... don't invest too much time looking at this code
+
+
 FABOOH - \ˈfab-ü\ 
 =================
 
