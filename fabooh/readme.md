@@ -3,8 +3,8 @@ FABOOH - \ˈfab-ü\
 
 Fabooh is an optimized C++ template based peripheral framework for the
 msp430 microcontroller.  It creates very small and efficient code while
-still providing a flexible framework akin to what you might expect in
-something like Energia with minimal overhead.  It makes liberal use of inline
+still providing a flexible framework similar to what you might expect 
+to find with something like the Arduino API.  It makes liberal use of inline
 msp430-gcc assembler code to produce optimized code that is sometimes
 smaller than generic 'C' code.
 
@@ -41,7 +41,7 @@ void loop() {
 }</code>
 </pre>
 
-This results in very efficient code that uses only 158 bytes of flash, and no DATA or BSS space.
+This results in very efficient code that uses only 120 bytes of flash, and no DATA or BSS space.
 
 Dependencies
 ------------
@@ -54,6 +54,21 @@ to use.
 Usage
 -----
 
+Fabooh assumes a unix or unix-like shell environment (cygwin).  Makefiles drive
+the build process.  It assumes that the msp430-gcc toolchain and mspdebug
+is in your path. If you have a copy of naken430utils, it will use that to
+compute cycle counts of your resulting asm code.
+
+The directory tree mirrors what is required to run inside the Energia build system.
+(Energia is not needed to use fabooh). However, I'm trying to provide the ability
+to use fabooh as a target platform along side the standard Energia framework.
+This might be useful for people who don't want to run command line make builds
+
+* examples/ - where you find sample code for fabooh grouped in categories
+* msp430/cores/fabooh/ - contains the fabooh framework header files
+* msp430/cores/fabooh/drivers/ - contains peripheral drivers, things like serial, spi, led, lcd
+* msp430/variants/ - these are the "boards" pin mapping for each chip and board supported
+
 To build all examples:
 <pre>
  $ make clean all 
@@ -64,6 +79,18 @@ To build and install the blink example using the defaults (msp430g2553):
  $ cd examples/basic 
  $ make clean all install
 </pre>
+
+Some important files.
+
+* includes.mk - contains make rules used by all the samples. If you want to
+switch boards you would edit this and find the line where the board
+and chip files are included
+* include-msp430fr5739.mk - will allow you to compile for the Fraunchpad
+* include-msp430g2231in14.mk - for the launchpad with a g2231 chip, It
+is setup for 16MHz instead of the default 1MHz, you will have to tweak
+the DCO values in cpu430.h for your chip, or change the F_CPU to 1000000
+* include-msp430g2553in29.mk - this is the default using 16MHz g2553 chip
+
 
 Credits
 -------
@@ -89,29 +116,30 @@ I used CCS for a while but still I wanted someting better.
 
 I really wanted a simple to use API. I wanted to be able to share my code and to use other
 peoples code. I liked the idea of the Arduino API but the implemention isn't really focused
-on small or efficient code.  Around that time I started to contribute my time to the
-Energia project which is a port Arduino that runs on the msp430. I like it and we do
+on small or efficient code.  About a year ago, I started to contribute my time to the
+Energia project. It is a port of Arduino that runs on the msp430 chips. I like it and we do
 try to be as efficient as we can be within the confines of the Arduino framework.
 One of the biggest things we accomplished was to get a larger number of people
 using msp430-gcc.
 
-This code is my attempt to retain the goodness of the Energia framework while trying
-to be as fast and efficient as I can be without worrying about breaking the Arduino
-API.  The code makes frequent use of msp430-gcc's ability to inline msp430 asm. If you
-look at the fabooh implementation of the software only serial code in the drivers
-directory, you will see some very tight asm code that can use any combination of
-ports and pins. I don't know how you would do that in straight 'C' and msp430 asm
-without some really convoluted macros.
+This code is my attempt to retain the goodness of the Energia framework while
+trying to be as fast and efficient as I can be without worrying about breaking
+the Arduino API.  The code makes frequent use of msp430-gcc's ability to
+inline msp430 asm. If you look at the fabooh implementation of a software
+only UART (drivers/swserial430.h), you will see some very tight asm code
+that can use any combination of ports and pins. I don't know how you would
+do that in straight 'C' and msp430 asm without some really convoluted macros.
 
-Fabooh tries to use compile time decisions over runtime ones. The way the gpio
-class templates work assumes you know at compile time which pins and ports you
-want to use and the code doesn't end up using any flash or ram space at runtime
-trying to figure that out. Constrast that with the table look up scheme that is done at runtime with Arduino based
-frameworks. The Arduino scheme uses up time, flash and ram space that isn't in excess on
-the small msp430 value line chips.  I think you will like the results achieved with the
-minor changes you will have to make to your coding style to take advantage of fabooh.
+Fabooh favors compile time decisions over runtime ones. The gpio class
+templates assume you know at compile time which pins and ports you want
+to use and the code doesn't end up using any flash or ram space at runtime
+trying to figure that out. Constrast that with the table look up scheme
+that is done at runtime with Arduino based frameworks. The Arduino scheme
+uses up time, flash and ram space that isn't in excess on the small msp430
+value line chips.  I think you will like the results achieved with the minor
+changes you will have to make to your coding style to take advantage of fabooh.
 
-At this point in the msp430 lifecycle mamy things have changed for the better. The
+At this point in the msp430 lifecycle many things have changed for the better. The
 msp430-gcc I'm using is based on 4.6.3 gnu. It is fully featured and can be used
 with all the msp430 chips, value line chips included. Energia is being widely used
 so getting a working msp430-gcc is not really a problem.
