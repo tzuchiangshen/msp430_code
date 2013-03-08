@@ -13,8 +13,8 @@ FABOOH_DIR?=$(patsubst %/,%,$(SELF_DIR))
 FABOOH_PLATFORM?=$(FABOOH_DIR)/msp430
 
 #include $(FABOOH_DIR)/include-msp430g2231in14.mk
-include $(FABOOH_DIR)/include-msp430g2553in20.mk
-#include $(FABOOH_DIR)/include-msp430fr5739.mk
+#include $(FABOOH_DIR)/include-msp430g2553in20.mk
+include $(FABOOH_DIR)/include-msp430fr5739.mk
 
 # user command line additional CFLAGS
 FLAGS?=

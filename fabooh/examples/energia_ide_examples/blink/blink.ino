@@ -9,18 +9,15 @@
 #include <main.h>
 
 void setup() {
-
   pinMode(RED_LED,OUTPUT);
   pinMode(GREEN_LED,OUTPUT);
   pinMode(PUSH2,INPUT_PULLUP);
 
   digitalWrite(GREEN_LED, LOW);
   digitalWrite(RED_LED, HIGH);
-
 }
 
 void loop() {
-  
   // block loop if user holds down the button
   if ( !digitalRead(PUSH2) ) {
     do {

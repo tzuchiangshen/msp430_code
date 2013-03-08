@@ -11,23 +11,23 @@
 #include <main.h>
 
 void setup() {
-  pinMode(RED_LED, OUTPUT);
-  pinMode(GREEN_LED, OUTPUT);
-  pinMode(PUSH2, INPUT_PULLUP);
+  RED_LED::set_mode(OUTPUT);
+  GREEN_LED::set_mode(OUTPUT);
+  PUSH2::set_mode(INPUT_PULLUP);
 
-  digitalWrite(GREEN_LED, LOW);
-  digitalWrite(RED_LED, HIGH);
+  GREEN_LED::low();
+  RED_LED::high();
 }
 
 void loop() {
   // block loop if user holds down the button
-  if ( !digitalRead(PUSH2) ) {
+  if ( !PUSH2::read() ) {
     do {
-      delay(10); // debounce the button
-    } while(!digitalRead(PUSH2));
+      delay_msecs(10); // debounce the button
+    } while(!PUSH2::read());
   }
 
   RED_LED::toggle();
   GREEN_LED::toggle();
-  delay(100);
+  delay_msecs(100);
 }

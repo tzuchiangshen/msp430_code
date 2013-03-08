@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 03-04-2013
- * Version: 1.0.2
+ *    Date: 03-08-2013
+ * Version: 1.0.3
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -28,7 +28,7 @@
 #define GPIO_H_
 
 #define GPIO_VERSION 0x0100 /* 1.0 */
-#define GPIO_BUILD   0x0002 /* build 2*/
+#define GPIO_BUILD   0x0003 /* build #*/
 
 typedef volatile uint8_t & u8_SFR;        /* 8 bit unsigned Special Function Register reference */
 typedef const volatile uint8_t & u8_CSFR; /* 8 bit unsigned Constant Special Function Register reference */
@@ -252,7 +252,7 @@ struct GPIO_PIN {
       PORT::PDIR() |= MASK;
     }
 
-    ALWAYS_INLINE static void pinMode(const pin_mode mode) {
+    ALWAYS_INLINE static void set_mode(const pin_mode mode) {
         if ( 0 ) {
         }
         else if (mode == OUTPUT) {
@@ -391,7 +391,7 @@ typedef DummyGPIO<0> NO_PIN;
 #define digitalRead(PIN_T) PIN_T::read()
 #define digitalWrite(PIN_T,_value) PIN_T::write(_value)
 
-#define pinMode(PIN_T,_mode) PIN_T::pinMode(_mode)
+#define pinMode(PIN_T,_mode) PIN_T::set_mode(_mode)
 
 /*
  * port helper macros
