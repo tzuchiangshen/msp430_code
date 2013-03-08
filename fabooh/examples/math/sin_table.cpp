@@ -9,31 +9,14 @@
  */
 
 #include <fabooh.h>
-#include <serial.h>
-#include <math.h>
 #include <main.h>
 
-/*
- * serial - declare output only bit banged/cycle counting UART with output
- *
- * use mixins to compose a minimal sized and flexible serial class
- *
- */
-template<uint32_t BPS, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
-struct serial_t:
-#if defined(__MSP430_HAS_USCI__)
-  serial_base_usci_t<BPS, MCLK_HZ, TXPIN, RXPIN>  /* use hardware USCI UART */
-#else
-  serial_base_sw_t<BPS, MCLK_HZ, TXPIN, RXPIN>    /* use software only UART */
-#endif
-  ,print_t<serial_t<BPS, MCLK_HZ, TXPIN, RXPIN>, uint32_t, uint32_t>
-{
-  // implementation is mashup of UART and print_t mix-ins
-};
+#include <math.h>
+#include <serial.h>
 
 namespace {
   const uint32_t BAUD_RATE = 9600;
-  typedef serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial; /* TX=P?.? varies, RX=NO_PIN */
+  typedef serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial; /* TX=P?.? varies, RX=NO_PIN */
   serial Serial;
 };
 

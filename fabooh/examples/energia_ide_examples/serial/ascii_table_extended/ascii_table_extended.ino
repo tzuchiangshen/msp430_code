@@ -11,22 +11,12 @@
  */
 #include <fabooh.h>
 #include <serial.h>
-#include "main.h"
-
-/*
- * use serial_base_sw_t so it works with all boards without change
- */
-template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
-struct serial_t:
-  serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
-  print_t<serial_t<BAUD, MCLK_HZ, TXPIN, RXPIN>, uint16_t, uint32_t>
-{
-};
+#include <main.h>
 
 //------- File Globals ------
 namespace {
   const uint32_t BAUD_RATE=9600;
-  typedef serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial;
+  typedef serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial;
 
   serial Serial;
   unsigned thisByte=' '; // first visible ASCIIcharacter ' ' is number 32:

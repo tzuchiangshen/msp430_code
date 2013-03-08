@@ -27,6 +27,24 @@
 #define SERIAL_H_
 
 #include "drivers/usciserial430.h"
+#include "drivers/eusciserial430.h"
 #include "drivers/swserial430.h"
+
+//------------------------------------------------------------------------
+// mix-in some serial and print to form a working serial class
+
+template <uint32_t BAUD, uint32_t MCLK_HZ,
+          typename TXPIN, typename RXPIN>
+struct serial_default_t:
+#if defined(__MSP430_HAS_USCI__)
+  serial_base_usci_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
+#elif defined(__MSP430_HAS_EUSCI_A0__)
+  serial_base_eusci_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
+#else
+  serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
+#endif
+  print_t<serial_default_t<BAUD, MCLK_HZ, TXPIN, RXPIN>, uint16_t, uint32_t >
+{
+};
 
 #endif

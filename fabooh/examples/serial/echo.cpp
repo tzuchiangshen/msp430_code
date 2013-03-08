@@ -6,12 +6,13 @@
  */
 
 #include <fabooh.h>
-#include <serial.h>
 #include <main.h>
+
+#include <serial.h>
 
 namespace {
   const uint32_t BAUD_RATE = 9600;
-  sw_serial_t<BAUD_RATE, CPU::frequency, TX_PIN, RX_PIN> Serial; // TX=varies, RX=varies
+  serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, RX_PIN> Serial; // TX=varies, RX=varies
   const char *prompt = "\r\ntype here: ";
 }
 

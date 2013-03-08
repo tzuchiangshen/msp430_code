@@ -17,31 +17,18 @@
  */
 
 #include <fabooh.h>
-#include <serial.h>
-
 #define NO_DATA_INIT /* 0 DATA, and thisByte is the only BSS variable we just set it in setup() */
 #define NO_BSS_INIT /* thisByte is really a BSS value, set in setup() */
 #include <main.h>
 
-typedef unsigned counter_t; /* type we use for counting from ' ' -> '~' */
+#include <serial.h>
 
-// mix-in some serial and print to form a working serial class
-template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
-struct serial_t:
-#if defined(__MSP430_HAS_USCI__)
-  serial_base_usci_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
-#else
-  serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
-#endif
-  print_t<serial_t<BAUD, MCLK_HZ, TXPIN, RXPIN>, uint16_t, uint32_t >
-{
-};
+typedef unsigned counter_t; /* type we use for counting from ' ' -> '~' */
 
 //------- file space globals ------
 namespace {
-
   const uint32_t BAUD_RATE=9600;
-  serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> Serial; // xmit only serial
+  serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, RX_PIN> Serial; // xmit only serial
 
 #if defined(NO_DATA_INIT)
   counter_t thisByte; // use less code by initializing in setup()

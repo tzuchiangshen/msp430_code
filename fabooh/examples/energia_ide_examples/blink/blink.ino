@@ -10,22 +10,22 @@
 
 void setup() {
 
-  RED_LED::pinMode(OUTPUT);
-  GREEN_LED::pinMode(OUTPUT);
-  PUSH2::setmode_inputpullup();
+  pinMode(RED_LED,OUTPUT);
+  pinMode(GREEN_LED,OUTPUT);
+  pinMode(PUSH2,INPUT_PULLUP);
 
-  GREEN_LED::low();
-  RED_LED::high();
+  digitalWrite(GREEN_LED, LOW);
+  digitalWrite(RED_LED, HIGH);
 
 }
 
 void loop() {
   
   // block loop if user holds down the button
-  if ( !PUSH2::read() ) {
+  if ( !digitalRead(PUSH2) ) {
     do {
       delay_msecs(10); // debounce switch
-    } while(!PUSH2::read());
+    } while(!digitalRead(PUSH2));
   }
 
   RED_LED::toggle();

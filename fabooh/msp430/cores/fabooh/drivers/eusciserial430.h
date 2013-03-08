@@ -1,13 +1,12 @@
 /*
- * usciserial430.h - USCI hardware Serial UART template for msp430
+ * eusciserial430.h - EUSCI hardware Serial UART template for msp430
  *
- * Created: Nov-12-2012
+ * Created: Mar-08-2013
  *  Author: rick@kimballsoftware.com
  *    Date: 03-08-2013
- * Version: 1.0.3
+ * Version: 1.0.0
  *
- * 11-12-2012: 0.0.001 rick@kimballsoftware.com - initial version
- * 02-05-2013: 0.0.002 rick@kimballsoftware.com - tweaks to remove TX RX instances
+ * 03-08-2012: 1.0.0 rick@kimballsoftware.com - initial version
  *
  * Acknowledgments:
  *  Serial API inspired by Arduino.
@@ -30,29 +29,41 @@
  *
  */
 
-#ifndef USCISERIAL_430_H_
-#define USCISERIAL_430_H_
+#ifndef EUSCISERIAL_430_H_
+#define EUSCISERIAL_430_H_
 
-#ifdef __MSP430_HAS_USCI__
+#if defined(__MSP430_HAS_EUSCI_A0__)
 
 template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
-struct serial_base_usci_t {
+struct serial_base_eusci_t {
 
   /**
    * begin( baudrate ) - initialize TX/RX pins
    */
   void begin(const uint32_t baud_ignored=BAUD /* not used */) {
-      const unsigned long baud_rate_20_bits = (MCLK_HZ + (BAUD >> 1)) / BAUD; // Bit rate divisor
-                                                      // Configure TXPIN and RXPIN as UART controlled pins
-      P1SEL |= (TXPIN::pin_mask | RXPIN::pin_mask);   // msp430g2553 uses P1.2=TXD P1.1=RXD
-      P1SEL2 |= (TXPIN::pin_mask | RXPIN::pin_mask);  //
+      const unsigned long baud_rate_20_bits = (MCLK_HZ + (BAUD >> 1))/BAUD; // Bit rate divisor
 
-      UCA0CTL1 = UCSWRST;                             // Hold USCI in reset to allow configuration
+      // Configure TXPIN and RXPIN as UART controlled pins
+      // P2DIR=X, P2SEL1.x=1, P2SEL0.x =0
+      if ( TXPIN::pin_mask && RXPIN::pin_mask) {
+        P2SEL0 &= ~(TXPIN::pin_mask | RXPIN::pin_mask);
+      }
+      else if ( TXPIN::pin_mask ) {
+        P2SEL0 &= ~(TXPIN::pin_mask);
+      }
+      else if ( RXPIN::pin_mask ) {
+        P2SEL0 &= ~(RXPIN::pin_mask);
+      }
+
+      P2SEL1 |= (TXPIN::pin_mask | RXPIN::pin_mask);  // P2DIR=X, P2SEL1.x=1, P2SEL0.x =0
+
+      UCA0CTL1 = UCSWRST | UCSSEL_2;                  // Hold USCI in reset to allow configuration
       UCA0CTL0 = 0;                                   // No parity, LSB first, 8 bits, one stop bit, UART (async)
-      UCA0BR1 = (baud_rate_20_bits >> 12) & 0xFF;     // High byte of whole divisor
+      UCA0ABCTL = 0;                                  //
       UCA0BR0 = (baud_rate_20_bits >> 4) & 0xFF;      // Low byte of whole divisor
-      UCA0MCTL = ((baud_rate_20_bits << 4) & 0xF0) | UCOS16; // Fractional divisor, over sampling mode
-      UCA0CTL1 = UCSSEL_2;                            // Use SMCLK for bit rate generator, then release reset
+      UCA0BR1 = (baud_rate_20_bits >> 12) & 0xFF;     // High byte of whole divisor
+      UCA0MCTLW = ((baud_rate_20_bits << 4) & 0xF0) | UCOS16;
+      UCA0CTL1 &= ~UCSWRST;                           // Use SMCLK for bit rate generator, then release reset
 
       (void)baud_ignored;
   }
@@ -62,25 +73,25 @@ struct serial_base_usci_t {
    */
   void end() {
     // wait for TX/RX to finish
-    while (UCA0STAT & UCBUSY) ;
+    while( UCA0STATW & UCBUSY);
 
     // put USCI in reset
     UCA0CTL1 = UCSWRST;
 
     // Revert to default to GPIO input
     if ( TXPIN::pin_mask && RXPIN::pin_mask ) {
-      P1DIR  &= ~(TXPIN::pin_mask);
-      P1SEL  &= ~(TXPIN::pin_mask | RXPIN::pin_mask);
-      P1SEL2 &= ~(TXPIN::pin_mask | RXPIN::pin_mask);
+      P2DIR  &= ~(TXPIN::pin_mask);
+      P2SEL0  &= ~(TXPIN::pin_mask | RXPIN::pin_mask);
+      P2SEL1 &= ~(TXPIN::pin_mask | RXPIN::pin_mask);
     }
     else if ( TXPIN::pin_mask ) {
-      P1DIR  &= ~(TXPIN::pin_mask);
-      P1SEL  &= ~(TXPIN::pin_mask);
-      P1SEL2 &= ~(TXPIN::pin_mask);
+      P2DIR &= ~(TXPIN::pin_mask);
+      P2SEL0 &= ~(TXPIN::pin_mask);
+      P2SEL1 &= ~(TXPIN::pin_mask);
     }
     else if ( RXPIN::pin_mask ) {
-      P1SEL  &= ~(RXPIN::pin_mask);
-      P1SEL2 &= ~(RXPIN::pin_mask);
+      P2SEL0  &= ~(RXPIN::pin_mask);
+      P2SEL1 &= ~(RXPIN::pin_mask);
     }
   }
 
@@ -88,7 +99,7 @@ struct serial_base_usci_t {
    * read() - blocking read
    */
   int read(void) {
-      while(!(IFG2 & UCA0RXIFG));                  // wait for something in the RX buffer
+      while(!(UCA0IFG & UCRXIFG));                  // wait for something in the RX buffer
       return UCA0RXBUF;
   }
 
@@ -100,9 +111,9 @@ struct serial_base_usci_t {
    *
    */
   int write_impl(uint8_t c) {
-      while(!(IFG2 & UCA0TXIFG));                  // wait for TX buffer to be empty
-      UCA0TXBUF = c;
-      return 1;
+    while( !(UCA0IFG & UCTXIFG));
+    UCA0TXBUF = c;
+    return 1;
   }
 
 };
@@ -110,12 +121,12 @@ struct serial_base_usci_t {
 // typical usage
 template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
 struct usci_serial_t:
-  serial_base_usci_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
+  serial_base_eusci_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
   print_t<usci_serial_t<BAUD, MCLK_HZ, TXPIN, RXPIN> >
 {
     // make it easier to instance in user code
 };
 
-#endif /* __MSP430_HAS_USCI__ */
+#endif /* __MSP430_HAS_EUSCI_A0__ */
 
-#endif /* USCISERIAL_430_H_ */
+#endif /* EUSCISERIAL_430_H_ */

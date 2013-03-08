@@ -7,27 +7,16 @@
  */
 
 #include <fabooh.h>
-#include <serial.h>
-
 #define NO_DATA_INIT
 #define NO_BSS_INIT
 #include <main.h>
 
-template <uint32_t BAUD, uint32_t MCLK_HZ, typename TXPIN, typename RXPIN>
-struct serial_t:
-#if defined(__MSP430_HAS_USCI__)
-  serial_base_usci_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
-#else
-  serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
-#endif
-  print_t<serial_t<BAUD, MCLK_HZ, TXPIN, RXPIN>, uint16_t, uint32_t>
-{
-};
+#include <serial.h>
 
 //------- File Globals ------
 namespace {
   const uint32_t BAUD_RATE=9600;
-  typedef serial_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial;
+  typedef serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial;
   serial Serial;
   unsigned thisByte; // first visible ASCIIcharacter ' ' is number 32:
 }

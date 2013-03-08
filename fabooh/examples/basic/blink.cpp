@@ -5,28 +5,29 @@
  */
 
 #include <fabooh.h>
+#include <pins.h>
 
 #define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>
 
 void setup() {
-  RED_LED::pinMode(OUTPUT);
-  GREEN_LED::pinMode(OUTPUT);
-  PUSH2::pinMode(INPUT_PULLUP);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(PUSH2, INPUT_PULLUP);
 
-  GREEN_LED::low();
-  RED_LED::high();
+  digitalWrite(GREEN_LED, LOW);
+  digitalWrite(RED_LED, HIGH);
 }
 
 void loop() {
   // block loop if user holds down the button
-  if ( !PUSH2::read() ) {
+  if ( !digitalRead(PUSH2) ) {
     do {
-      delay_msecs(10); // debounce the button
-    } while(!PUSH2::read());
+      delay(10); // debounce the button
+    } while(!digitalRead(PUSH2));
   }
 
-  // toggle the port as the leds are on the same one
-  RED_LED::toggle_pins(RED_LED::pin_mask|GREEN_LED::pin_mask);
-  delay_msecs(100);
+  RED_LED::toggle();
+  GREEN_LED::toggle();
+  delay(100);
 }

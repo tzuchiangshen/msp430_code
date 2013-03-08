@@ -135,7 +135,7 @@
   * PJ port and PJ.X shorthand typedefs
   */
 #ifdef __MSP430_HAS_PORTJ_R__
- typedef GPIO_PORT_BASE<
+ typedef GPIO_PORT_BASE2<
          PJIN_L
          ,PJOUT_L
          ,PJDIR_L

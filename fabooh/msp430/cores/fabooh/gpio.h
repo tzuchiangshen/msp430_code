@@ -33,6 +33,8 @@
 typedef volatile uint8_t & u8_SFR;        /* 8 bit unsigned Special Function Register reference */
 typedef const volatile uint8_t & u8_CSFR; /* 8 bit unsigned Constant Special Function Register reference */
 
+enum yesno_e { NO=0, YES=1 };
+
 /*
  * pin_mode - settings for port/pin direction
  * Note: values used coincide with the optimized constant
@@ -51,7 +53,7 @@ enum pin_value {
 };
 
 /*
- * GPIO_PORT_BASE<> - port template for basic ports
+ * GPIO_PORT_BASE0<> - port template for basic ports
  *
  */
 template <
@@ -59,16 +61,16 @@ template <
     ,u8_SFR pout
     ,u8_SFR pdir
     ,u8_SFR psel
-    ,u8_SFR psel2
     ,u8_SFR pren
 >
-struct GPIO_PORT_BASE {
+struct GPIO_PORT_BASE0 {
     static u8_CSFR PIN()  { return pin;  }
     static u8_SFR POUT()  { return pout; }
     static u8_SFR PDIR()  { return pdir; }
     static u8_SFR PSEL()  { return psel; }
-    static u8_SFR PSEL2() { return psel2; }
     static u8_SFR PREN()  { return pren; }
+    static yesno_e hasPSEL2() { return NO; }
+    static yesno_e hasInterrupt() { return NO; }
 
     /**
      * pin direction configuration methods
@@ -134,9 +136,56 @@ struct GPIO_PORT_BASE {
 };
 
 /*
- * GPIO_PORT<> - interrupt capable port template
+ * GPIO_PORT_BASE2<> - port base template with psel2
  *
  */
+
+template <
+    u8_CSFR pin
+    ,u8_SFR pout
+    ,u8_SFR pdir
+    ,u8_SFR psel
+    ,u8_SFR psel2
+    ,u8_SFR pren
+>
+struct GPIO_PORT_BASE2 :
+  GPIO_PORT_BASE0<pin,pout,pdir,psel,pren>
+{
+    static u8_SFR PSEL2() { return psel2; }
+    static yesno_e hasPSEL2() { return YES; }
+};
+
+/*
+* GPIO_PORT0<> - port template for interrupt capable ports
+*
+*/
+
+template <
+  u8_CSFR pin
+  ,u8_SFR pout
+  ,u8_SFR pdir
+  ,u8_SFR pifg
+  ,u8_SFR pies
+  ,u8_SFR pie
+  ,u8_SFR psel
+  ,u8_SFR pren
+>
+struct GPIO_PORT0 :
+GPIO_PORT_BASE0<pin,pout,pdir,psel,pren>
+{
+  static u8_SFR PIFG()  { return pifg; }
+  static u8_SFR PIES()  { return pies; }
+  static u8_SFR PIE()   { return pie; }
+  static yesno_e hasInterrupt() { return YES; }
+
+  /* TODO: implement decent pin interrupt ISR handlers () */
+};
+
+/*
+ * GPIO_PORT<> - port template for interrupt capable ports
+ *
+ */
+
 template <
     u8_CSFR pin
     ,u8_SFR pout
@@ -149,7 +198,7 @@ template <
     ,u8_SFR pren
 >
 struct GPIO_PORT :
-  GPIO_PORT_BASE<pin,pout,pdir,psel,psel2,pren>
+  GPIO_PORT_BASE2<pin,pout,pdir,psel,psel2,pren>
 {
     static u8_SFR PIFG()  { return pifg; }
     static u8_SFR PIES()  { return pies; }
@@ -162,6 +211,7 @@ struct GPIO_PORT :
  * GPIO_PIN<> - pin template
  *
  */
+
 template <const uint8_t MASK, typename PORT>
 struct GPIO_PIN {
     typedef GPIO_PIN<MASK,PORT> T;
@@ -171,12 +221,16 @@ struct GPIO_PIN {
     static u8_SFR POUT()  { return PORT::POUT(); }
     static u8_SFR PDIR()  { return PORT::PDIR(); }
     static u8_SFR PSEL()  { return PORT::PSEL(); }
-    static u8_SFR PSEL2() { return PORT::PSEL2(); }
+    static u8_SFR PSEL2() { return PORT::PSEL2();}
     static u8_SFR PREN()  { return PORT::PREN(); }
 
     static u8_SFR PIFG()  { return PORT::PIFG(); }
     static u8_SFR PIES()  { return PORT::PIES(); }
     static u8_SFR PIE()   { return PORT::PIE(); }
+
+    /*
+     * pin direction functions
+     */
 
     ALWAYS_INLINE static void setmode_input() {
       PORT::PDIR() &= ~MASK;
@@ -216,12 +270,16 @@ struct GPIO_PIN {
     }
 
     /*
-     * pin modification functions
+     * pin query functions
      */
 
     ALWAYS_INLINE static unsigned read() {
       return (PORT::PIN() & MASK ) != 0;
     }
+
+    /*
+     * pin modification functions
+     */
 
     ALWAYS_INLINE static void write(pin_value value) {
         if (value == HIGH) {
@@ -248,7 +306,14 @@ struct GPIO_PIN {
     }
 
     /*
-     * port wide (8bits) modifcations using pin's port
+     * port wide (8bits) direction using pin as port
+     */
+    ALWAYS_INLINE static void set_modes(const uint8_t pins_mask, pin_mode mode) {
+      PORT::set_mode(pins_mask, mode);
+    }
+
+    /*
+     * port wide (8bits) modifications using pin as port
      */
     ALWAYS_INLINE static void set_pins(const uint8_t pins_mask) {
       PORT::POUT() |= pins_mask;
@@ -299,23 +364,45 @@ struct DummyGPIO {
         uint16_t PSEL2() { return 0; }
         uint16_t PREN() { return 0; }
         uint8_t PINMASK() { return 0; }
+
+        void set_mode(uint8_t) {}
     } port;
     static const uint8_t pin_mask=0;
 
     static void setmode_input() {}
     static void setmode_inputpullup() {}
     static void setmode_inputpulldown() {}
-    static void setmode_output() { }
-    static void pinMode(pin_mode) { }
+    static void setmode_output() {}
+    static void pinMode(pin_mode) {}
 
     static void high() { }
     static void low() { }
     static void toggle() { }
 
-    static unsigned read() { return 0; }
+    static int read() { return 0; }
     static void write(pin_value) {}
 };
 
 typedef DummyGPIO<0> NO_PIN;
+
+/*
+ * nod to Arduino style
+ */
+#define digitalRead(PIN_T) PIN_T::read()
+#define digitalWrite(PIN_T,_value) PIN_T::write(_value)
+
+#define pinMode(PIN_T,_mode) PIN_T::pinMode(_mode)
+
+/*
+ * port helper macros
+ * assumes all pins are from the same port, no check performed , user tasked with being smart
+ */
+#define portMode(B0,B1, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask),_mode);
+#define portMode3(B0,B1,B2, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask|B2::pin_mask),_mode);
+#define portMode4(B0,B1,B2,B3, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask|B2::pin_mask|B3::pin_mask),_mode);
+
+#define portToggle(B0,B1) B0::toggle_pins(B0::pin_mask|B1::pin_mask);
+#define portToggle3(B0,B1,B2) B0::toggle_pins(B0::pin_mask|B1::pin_mask|B2::pin_mask);
+#define portToggle4(B0,B1,B2,B3) B0::toggle_pins(B0::pin_mask|B1::pin_mask|B2::pin_mask|B3::pin_mask);
 
 #endif /* GPIO_H_ */
