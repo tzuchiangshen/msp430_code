@@ -1,9 +1,10 @@
 /**
- * blink.ino - blink test
+ * blink.ino - blink test arduino style
  *
  * Pins Used: RED_LED, GREEN_LED, PUSH2
- *
  */
+
+#include <fabooh.h>
 
 #define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>

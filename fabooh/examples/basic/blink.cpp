@@ -1,11 +1,10 @@
 /**
- * blink.cpp - blink test
+ * blink.cpp - blink test fabooh style
  *
  * Pins Used: RED_LED, GREEN_LED, PUSH2
  */
 
 #include <fabooh.h>
-#include <pins.h>
 
 #define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>
@@ -29,5 +28,6 @@ void loop() {
 
   RED_LED::toggle();
   GREEN_LED::toggle();
+
   delay_msecs(100);
 }
