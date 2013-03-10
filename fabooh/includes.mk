@@ -43,7 +43,7 @@ LDFLAGS=-g -mmcu=$(MCU) -mdisable-watchdog \
 
 LDLIBS?=
 
-OBJECTS?=$(TARGET).o
+OBJECTS?=$(TARGET).o $(USEROBJS)
 
 all: $(TARGET).elf
 
@@ -58,6 +58,7 @@ clean:
 	@rm -f $(TARGET)_asm_count.txt
 	@rm -f $(TARGET).hex
 	@rm -f $(TARGET).map
+	rm -f $(USERCLEAN)
  
 install: all
 	$(MSPDEBUG) rf2500 "prog $(TARGET).elf"
@@ -75,4 +76,7 @@ size: all
 	echo "#include <fabooh.h>" > header.tmp
 	cat header.tmp $< > $@
 	rm header.tmp
+
+%.cpp: %.re
+	re2c -is -o $@ $<
 
