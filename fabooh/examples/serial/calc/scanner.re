@@ -61,38 +61,38 @@ int scan(scanner_state &s, scanner_token &token) {
      integer { // collapse digits into numbers
        long n = _fabooh_atol(lexeme,YYCURSOR);
 
-       if ( n < 65536 ) {
-         token.opcode = T_INT16;
+       if ( n < 32768 ) {
+         token.token = T_INT16;
          token.n16 = n;
        }
        else {
-         token.opcode = T_INT32;
+         token.token = T_INT32;
          token.n32 = n;
        }
-       return token.opcode;
+       return token.token;
      }
 
      opcode { // lump all the operators into one token
-       token.opcode = T_OPERATOR;
+       token.token = T_OPERATOR;
        token.n16 = *lexeme;
-       return token.opcode;
+       return token.token;
      }
 
      "=" { // end of input equals style
-       token.opcode = T_EOI;
+       token.token = T_EOI;
        token.n16 = *lexeme;
-       return token.opcode;
+       return token.token;
      }
 
      "\r" { // end of input enter style
-       token.opcode = T_EOI;
+       token.token = T_EOI;
        token.n16 = *lexeme;
-       return token.opcode;
+       return token.token;
      }
 
      [^] { // everthing else, let the grammar deal with it
-       token.opcode = (tokens_e)*lexeme;
-       return token.opcode;
+       token.token = (tokens_e)*lexeme;
+       return token.token;
      }
 
      */

@@ -6,8 +6,8 @@
  *       left as an exercise. Only implements:  1+2=3
  *
  * $ msp430-size calc.elf * on the msp430g2231 w/serial_sw_uart
- *   text    data     bss     dec     hex filename
- *   1642       0       2    1644     66c calc.elf
+ *  text     data     bss     dec     hex filename
+ *  1628        0       2    1630     65e calc.elf
  *
  */
 
@@ -24,7 +24,7 @@ namespace {
   const char *prompt = "\r\nexpr> ";
 }
 
-void showtoken(scanner_token &token); // forward declaration
+void showtoken(scanner_token &); // forward declaration
 
 void blink() {
   unsigned cnt = 6;
@@ -46,7 +46,6 @@ void setup() {
 ALWAYS_INLINE
 void parse_expr() {
   scanner_state scanner; // use default 24 byte buffer
-
   scanner.init();
 
   /*
@@ -84,33 +83,33 @@ void parse_expr() {
 
   const int MAX_TOKENS=6; /* 2+4 bytes 36 bytes */
 
-  scanner_token opstack[MAX_TOKENS], *token;
-  unsigned opcode;
+  scanner_token expr_stack[MAX_TOKENS], *tok_ptr;
+  unsigned token_type;
 
-  token = opstack;
+  tok_ptr = expr_stack; // point at first expression in array
 
   do {
-    opcode = scan(scanner, *token);
-    showtoken(*token);
-    if (token + 1 < &opstack[MAX_TOKENS]) {
-      token++; // just overwrite the last op if they provide too many
+    token_type = scan(scanner, *tok_ptr);
+    showtoken(*tok_ptr);
+    if (tok_ptr + 1 < &expr_stack[MAX_TOKENS]) {
+      tok_ptr++; // just overwrite the last tok_values if they provide too many
     }
     else {
       blink();
     }
-  } while (opcode != T_EOI);
+  } while (token_type != T_EOI);
 
   // OK, I parsed the string into tokens for you. I'll leave
   // the calculator implementation to you
 
   // To get you started, the sample below can deal with 1+2=3
 
-  if ( opstack[0].opcode == T_INT16 &&
-       opstack[1].opcode == T_OPERATOR &&
-       opstack[2].opcode == T_INT16 ) {
-    long n0 = (unsigned)opstack[0].n16, n1=(unsigned)opstack[2].n16;
+  if ( expr_stack[0].token == T_INT16 &&
+       expr_stack[1].token == T_OPERATOR &&
+       expr_stack[2].token == T_INT16 ) {
+    long n0 = expr_stack[0].n16, n1=expr_stack[2].n16;
 
-    switch(opstack[1].n16) {
+    switch(expr_stack[1].n16) {
     case '+': n0 += n1; break;
     case '-': n0 -= n1; break;
     case '/': n0 /= n1; break;
@@ -120,7 +119,7 @@ void parse_expr() {
     }
 
     // repeat back what they told us
-    Serial << endl << opstack[0].u16 << _RAW(opstack[1].n16) << n1 << "=" << n0 << endl;
+    Serial << endl << expr_stack[0].u16 << _RAW(expr_stack[1].n16) << n1 << "=" << n0 << endl;
   }
   else {
     Serial << endl << "error!\n";
@@ -152,20 +151,20 @@ uint8_t guard_raw(unsigned c) {
 /*
  * debug output to show the results of parser the input stream into tokens
  */
-void showtoken(scanner_token &token) {
+void showtoken(scanner_token &tok_value) {
 #if 0
-    Serial << "\ntoken.opcode=0x" << _HEX(token.opcode);
+    Serial << "\ntok_value.token=0x" << _HEX(tok_value.token);
 
-    if ( token.opcode == T_INT16 ) {
-      Serial << ", .n16=" << token.n16 << endl;
+    if ( tok_value.token == T_INT16 ) {
+      Serial << ", .n16=" << tok_value.n16 << endl;
     }
-    else if ( token.opcode == T_INT32 ) {
-      Serial << ", .n32=" << token.n32 << endl;
+    else if ( tok_value.token == T_INT32 ) {
+      Serial << ", .n32=" << tok_value.n32 << endl;
     }
     else {
-      Serial  << ", .opcode='"<< _RAW(guard_raw(token.opcode)) << "'"
-              << ", .n16=0x" << _HEX(token.n16)
-              << ", .n16='" << _RAW(guard_raw(token.n16)) << "'"
+      Serial  << ", .token='"<< _RAW(guard_raw(tok_value.token)) << "'"
+              << ", .n16=0x" << _HEX(tok_value.n16)
+              << ", .n16='" << _RAW(guard_raw(tok_value.n16)) << "'"
               << endl;
     }
 #endif

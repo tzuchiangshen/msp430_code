@@ -41,7 +41,7 @@ struct scanner_state_t {
 typedef scanner_state_t<> scanner_state; // create typical use
 
 struct scanner_token {
-  tokens_e opcode;
+  tokens_e token;
   union {
     float f;
     unsigned long u32;
