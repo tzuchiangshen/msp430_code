@@ -365,7 +365,7 @@ struct DummyGPIO {
         uint16_t PREN() { return 0; }
         uint8_t PINMASK() { return 0; }
 
-        void set_mode(uint8_t) {}
+        ALWAYS_INLINE static void set_mode(const uint8_t, pin_mode) {}
     } port;
     static const uint8_t pin_mask=0;
 
@@ -373,7 +373,7 @@ struct DummyGPIO {
     static void setmode_inputpullup() {}
     static void setmode_inputpulldown() {}
     static void setmode_output() {}
-    static void pinMode(pin_mode) {}
+    static void set_mode(pin_mode) {}
 
     static void high() { }
     static void low() { }
@@ -386,14 +386,6 @@ struct DummyGPIO {
 typedef DummyGPIO<0> NO_PIN;
 
 /*
- * nod to Arduino style
- */
-#define digitalRead(PIN_T) PIN_T::read()
-#define digitalWrite(PIN_T,_value) PIN_T::write(_value)
-
-#define pinMode(PIN_T,_mode) PIN_T::set_mode(_mode)
-
-/*
  * port helper macros
  * assumes all pins are from the same port, no check performed , user tasked with being smart
  */
@@ -404,5 +396,13 @@ typedef DummyGPIO<0> NO_PIN;
 #define portToggle(B0,B1) B0::toggle_pins(B0::pin_mask|B1::pin_mask);
 #define portToggle3(B0,B1,B2) B0::toggle_pins(B0::pin_mask|B1::pin_mask|B2::pin_mask);
 #define portToggle4(B0,B1,B2,B3) B0::toggle_pins(B0::pin_mask|B1::pin_mask|B2::pin_mask|B3::pin_mask);
+
+/*
+ * nod to Arduino API
+ */
+#define digitalRead(PIN_T) PIN_T::read()
+#define digitalWrite(PIN_T,_value) PIN_T::write(_value)
+#define pinMode(PIN_T,_mode) PIN_T::set_mode(_mode)
+
 
 #endif /* GPIO_H_ */
