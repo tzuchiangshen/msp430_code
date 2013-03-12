@@ -5,4 +5,4 @@
 TARGET?=ws2811_basic
 LDLIBS?=
 
-include ../../includes.mk
+include ../../common.mk

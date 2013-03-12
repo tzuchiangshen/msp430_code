@@ -7,7 +7,7 @@ LDLIBS?=
 USEROBJS=scanner.o
 USERCLEAN=scanner.cpp
 
-include ../../../includes.mk
+include ../../../common.mk
 
 scanner.cpp: scanner.re
 	re2c -s -o $@ $<

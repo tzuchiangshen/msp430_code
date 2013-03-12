@@ -1,5 +1,5 @@
 #
-# includes.mk - common include used by fabooh example makefiles
+# common.mk - common include used by fabooh example makefiles
 #
 # Created: Feb 28, 2012
 #  Author: rick@kimballsoftware.com
@@ -12,9 +12,9 @@ SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 FABOOH_DIR?=$(patsubst %/,%,$(SELF_DIR))
 FABOOH_PLATFORM?=$(FABOOH_DIR)/msp430
 
-#include $(FABOOH_DIR)/include-msp430g2231in14.mk
-#include $(FABOOH_DIR)/include-msp430g2553in20.mk
-include $(FABOOH_DIR)/include-msp430fr5739.mk
+#include $(FABOOH_DIR)/mkfiles/nclude-msp430g2231in14.mk
+#include $(FABOOH_DIR)/mkfiles/include-msp430g2553in20.mk
+include $(FABOOH_DIR)/mkfiles/include-msp430fr5739.mk
 
 # user command line additional CFLAGS
 FLAGS?=
@@ -26,8 +26,6 @@ CC = msp430-gcc
 INCLUDE=-I $(FABOOH_PLATFORM)/cores/$(CORE) \
 		-I $(FABOOH_PLATFORM)/variants/$(BOARD) \
 		-I $(FABOOH_PLATFORM)/cores/$(CORE)/drivers
-
-# -flto -fwhole-program -fwrapv -fomit-frame-pointer \
 
 CFLAGS= -g -Os -Wall -Wunused -mdisable-watchdog \
  		-fdata-sections -ffunction-sections -MMD \
@@ -45,18 +43,18 @@ LDLIBS?=
 
 OBJECTS?=$(TARGET).o $(USEROBJS)
 
-NODEPS:=clean install size
+NODEPS:=clean
 
 DEPFILES:=$(patsubst %.o,%.d,$(OBJECTS))
 
-all: $(TARGET).elf
+.PHONY: $(NODEPS) install size
 
+all: $(TARGET).elf
 
 $(TARGET).elf : $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(TARGET).elf $(LDLIBS)
 	$(MSP430_STDLST) $(TARGET).elf
 
-.PHONY: clean install size
 
 clean:
 	@echo "cleaning $(TARGET) ..."

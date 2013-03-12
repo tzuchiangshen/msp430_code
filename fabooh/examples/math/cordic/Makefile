@@ -5,5 +5,5 @@
 TARGET?=cordic_table
 LDLIBS?=
 USEROBJS=cordic_wrapper.o cordic.o
-include ../../../includes.mk
+include ../../../common.mk
 

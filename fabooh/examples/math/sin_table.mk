@@ -4,5 +4,5 @@
 
 TARGET?=sin_table
 LDLIBS?=-lm
-include ../../includes.mk
+include ../../common.mk
 

@@ -4,5 +4,5 @@
 
 TARGET?=echo
 LDLIBS?=
-include ../../includes.mk
+include ../../common.mk
 

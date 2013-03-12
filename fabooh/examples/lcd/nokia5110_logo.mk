@@ -5,4 +5,4 @@
 TARGET?=nokia5110_logo
 LDLIBS?=
 
-include ../../includes.mk
+include ../../common.mk

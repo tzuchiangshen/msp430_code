@@ -4,5 +4,5 @@
 
 TARGET?=ascii_table
 LDLIBS?=
-include ../../includes.mk
+include ../../common.mk
 
