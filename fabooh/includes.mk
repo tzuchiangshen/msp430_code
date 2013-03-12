@@ -30,14 +30,14 @@ INCLUDE=-I $(FABOOH_PLATFORM)/cores/$(CORE) \
 # -flto -fwhole-program -fwrapv -fomit-frame-pointer \
 
 CFLAGS= -g -Os -Wall -Wunused -mdisable-watchdog \
-		-std=gnu++98 \
  		-fdata-sections -ffunction-sections \
 		-fwrapv -fomit-frame-pointer \
 		-mmcu=$(MCU) -DF_CPU=$(F_CPU) $(INCLUDE) \
 		$(STACK_CHECK) $(FLAGS)
 
 ASFLAGS = $(CFLAGS)
-CCFLAGS = $(CFLAGS)
+CCFLAGS = $(CFLAGS) -std=gnu++98 
+
 LDFLAGS=-g -mmcu=$(MCU) -mdisable-watchdog \
 		-Wl,--gc-sections,-Map=$(TARGET).map,-umain
 
