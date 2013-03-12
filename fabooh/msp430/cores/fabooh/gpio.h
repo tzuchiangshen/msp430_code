@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 03-08-2013
- * Version: 1.0.3
+ *    Date: 03-??-2013
+ * Version: 1.0.4
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -358,14 +358,14 @@ struct GPIO_PIN {
 template<uint8_t PORTPIN>
 struct DummyGPIO {
     struct {
-        uint16_t PIN() { return 0; }
-        uint16_t POUT() { return 0; }
-        uint16_t PSEL() { return 0; }
-        uint16_t PSEL2() { return 0; }
-        uint16_t PREN() { return 0; }
-        uint8_t PINMASK() { return 0; }
+        static uint16_t PIN() { return 0; }
+        static uint16_t POUT() { return 0; }
+        static uint16_t PSEL() { return 0; }
+        static uint16_t PSEL2() { return 0; }
+        static uint16_t PREN() { return 0; }
+        static uint8_t PINMASK() { return 0; }
 
-        ALWAYS_INLINE static void set_mode(const uint8_t, pin_mode) {}
+        static void set_mode(const uint8_t, pin_mode) {}
     } port;
     static const uint8_t pin_mask=0;
 
@@ -388,6 +388,7 @@ typedef DummyGPIO<0> NO_PIN;
 /*
  * port helper macros
  * assumes all pins are from the same port, no check performed , user tasked with being smart
+ *
  */
 #define portMode(B0,B1, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask),_mode);
 #define portMode3(B0,B1,B2, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask|B2::pin_mask),_mode);
