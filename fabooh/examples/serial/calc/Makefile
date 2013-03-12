@@ -5,10 +5,10 @@
 TARGET?=calc
 LDLIBS?=
 USEROBJS=scanner.o
-USERCLEAN=scanner.o scanner.cpp
+USERCLEAN=scanner.cpp
 
 include ../../../includes.mk
 
 scanner.cpp: scanner.re
-	re2c -is -o $@ $<
+	re2c -s -o $@ $<
 

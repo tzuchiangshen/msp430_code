@@ -30,7 +30,7 @@ INCLUDE=-I $(FABOOH_PLATFORM)/cores/$(CORE) \
 # -flto -fwhole-program -fwrapv -fomit-frame-pointer \
 
 CFLAGS= -g -Os -Wall -Wunused -mdisable-watchdog \
- 		-fdata-sections -ffunction-sections \
+ 		-fdata-sections -ffunction-sections -MMD \
 		-fwrapv -fomit-frame-pointer \
 		-mmcu=$(MCU) -DF_CPU=$(F_CPU) $(INCLUDE) \
 		$(STACK_CHECK) $(FLAGS)
@@ -45,15 +45,23 @@ LDLIBS?=
 
 OBJECTS?=$(TARGET).o $(USEROBJS)
 
+NODEPS:=clean install size
+
+DEPFILES:=$(patsubst %.o,%.d,$(OBJECTS))
+
 all: $(TARGET).elf
+
 
 $(TARGET).elf : $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(TARGET).elf $(LDLIBS)
 	$(MSP430_STDLST) $(TARGET).elf
 
+.PHONY: clean install size
+
 clean:
 	@echo "cleaning $(TARGET) ..."
-	@rm -f $(OBJECTS) $(TARGET).map $(TARGET).elf $(TARGET).d
+	@rm -f $(OBJECTS) $(TARGET).map $(TARGET).elf
+	@rm -f $(DEPFILES)
 	@rm -f $(TARGET)_asm_mixed.txt
 	@rm -f $(TARGET)_asm_count.txt
 	@rm -f $(TARGET).hex
@@ -66,10 +74,10 @@ install: all
 size: all
 	msp430-size $(TARGET).elf
 	
-%.o : %.cpp 
+%.o : %.cpp
 	$(CC) $(CFLAGS) -c $<
 
-%.o : %.c 
+%.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
 %.cpp:	%.ino
@@ -78,5 +86,11 @@ size: all
 	rm header.tmp
 
 %.cpp: %.re
-	re2c -is -o $@ $<
+	re2c -s -o $@ $<
+
+ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
+	#Chances are, these files don't exist.  GMake will create them and
+	#clean up automatically afterwards
+	-include $(DEPFILES)
+endif
 
