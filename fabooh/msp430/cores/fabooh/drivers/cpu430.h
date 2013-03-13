@@ -39,8 +39,8 @@ struct cpu430_t {
       BCSCTL1 = CALBC1_16MHZ;
       DCOCTL = CALDCO_16MHZ;
       #else
-      BCSCTL1 = 0x8F; // TBD: provide some default values for an msp430g2231
-      DCOCTL = 0x6F;  // each chip is different and needs to be calibrated
+      BCSCTL1 = 0x8F; // we provide some default values for an msp430g2231
+      DCOCTL = 0x6F;  // TODO: each chip is different and needs to be calibrated
       #endif
     }
     else if (MCLK_FREQ == 12000000) {

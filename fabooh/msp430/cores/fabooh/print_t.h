@@ -293,8 +293,8 @@ public:
     return static_cast<Writer*>(this)->write_impl(c);
   }
 
-  /* TBD: avoided println(n) functions to discourage usage, as they causes bloat */
-  /* TBD: work out a scheme to allow specialization of _print_base method */
+  /* TODO: avoided println(n) functions to discourage usage, as they causes bloat */
+  /* TODO: work out a scheme to allow specialization of _print_base method */
 
 
 private:

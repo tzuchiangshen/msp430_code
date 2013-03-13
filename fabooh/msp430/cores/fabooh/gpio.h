@@ -301,7 +301,7 @@ struct GPIO_PIN {
     }
 
     ALWAYS_INLINE static void toggle() {
-      if ( MASK)
+      if ( MASK )
         PORT::POUT() ^= MASK;
     }
 
