@@ -5,7 +5,6 @@
  *   text    data     bss     dec     hex filename
  *  11960       0       0   11960    2eb8 sin_table.elf
  *
- * TBD: implement CORDIC floating point routines
  */
 
 #include <fabooh.h>
