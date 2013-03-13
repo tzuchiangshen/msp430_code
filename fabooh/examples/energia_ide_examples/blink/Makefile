@@ -7,3 +7,5 @@ clean:
 install: all
 	@make -f blink.mk install
 
+debug: all
+	@make -f blink.mk debug

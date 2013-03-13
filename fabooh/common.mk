@@ -3,25 +3,32 @@
 #
 # Created: Feb 28, 2012
 #  Author: rick@kimballsoftware.com
-#    Date: 03-02-2012
-# Version: 1.0.2
+#    Date: 03-12-2012
+# Version: 1.0.3
 #
-
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-
 FABOOH_DIR?=$(patsubst %/,%,$(SELF_DIR))
 FABOOH_PLATFORM?=$(FABOOH_DIR)/msp430
 
+# pick a board, just uncomment one of the includes below
+
 #include $(FABOOH_DIR)/mkfiles/nclude-msp430g2231in14.mk
-#include $(FABOOH_DIR)/mkfiles/include-msp430g2553in20.mk
-include $(FABOOH_DIR)/mkfiles/include-msp430fr5739.mk
+include $(FABOOH_DIR)/mkfiles/include-msp430g2553in20.mk
+#include $(FABOOH_DIR)/mkfiles/include-msp430fr5739.mk
 
-# user command line additional CFLAGS
+# users can provide additional command line CFLAGS by
+# setting: $ make FLAGS="gcc extra flags here"
+# or by putting it in their makefiles
 FLAGS?=
+USEROBJS?=
+USERCLEAN?=
+LDLIBS?=
 
-MSP430_STDLST = $(FABOOH_DIR)/tools/msp430-stdlst
-MSPDEBUG = mspdebug
+# tools we use
 CC = msp430-gcc
+LD = msp430-gcc
+MSPDEBUG = mspdebug
+MSP430_STDLST = $(FABOOH_DIR)/tools/msp430-stdlst
 
 INCLUDE=-I $(FABOOH_PLATFORM)/cores/$(CORE) \
 		-I $(FABOOH_PLATFORM)/variants/$(BOARD) \
@@ -34,32 +41,29 @@ CFLAGS= -g -Os -Wall -Wunused -mdisable-watchdog \
 		$(STACK_CHECK) $(FLAGS)
 
 ASFLAGS = $(CFLAGS)
+
 CCFLAGS = $(CFLAGS) -std=gnu++98 
 
 LDFLAGS=-g -mmcu=$(MCU) -mdisable-watchdog \
 		-Wl,--gc-sections,-Map=$(TARGET).map,-umain
 
-LDLIBS?=
-
 OBJECTS?=$(TARGET).o $(USEROBJS)
-
-NODEPS:=clean
 
 DEPFILES:=$(patsubst %.o,%.d,$(OBJECTS))
 
-.PHONY: $(NODEPS) install size
+NODEPS:=clean
+.PHONY: $(NODEPS) install size debug
 
 all: $(TARGET).elf
 
 $(TARGET).elf : $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $(TARGET).elf $(LDLIBS)
+	$(LD) $(LDFLAGS) $(OBJECTS) -o $(TARGET).elf $(LDLIBS)
 	$(MSP430_STDLST) $(TARGET).elf
-
 
 clean:
 	@echo "cleaning $(TARGET) ..."
 	@rm -f $(OBJECTS) $(TARGET).map $(TARGET).elf
-	@rm -f $(DEPFILES)
+	@rm -f $(DEPFILES) header.tmp
 	@rm -f $(TARGET)_asm_mixed.txt
 	@rm -f $(TARGET)_asm_count.txt
 	@rm -f $(TARGET).hex
@@ -71,15 +75,20 @@ install: all
  
 size: all
 	msp430-size $(TARGET).elf
+
+debug: $(TARGET).elf
+	xterm -e 'mspdebug rf2500 gdb' &
+	sleep 2; xterm -e "msp430-gdb -ex='target remote:2000' $(TARGET).elf" &
 	
 %.o : %.cpp
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CCFLAGS) -c $<
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
 %.cpp:	%.ino
 	echo "#include <fabooh.h>" > header.tmp
+	echo "#line 1 \"$<\"" >>header.tmp
 	cat header.tmp $< > $@
 	rm header.tmp
 
@@ -91,4 +100,3 @@ ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
 	#clean up automatically afterwards
 	-include $(DEPFILES)
 endif
-
