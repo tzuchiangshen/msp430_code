@@ -77,8 +77,8 @@ size: all
 	msp430-size $(TARGET).elf
 
 debug: $(TARGET).elf
-	xterm -e 'mspdebug rf2500 gdb' &
-	sleep 2; xterm -e "msp430-gdb -ex='target remote:2000' $(TARGET).elf" &
+	xterm -fn 8x13 -e 'mspdebug rf2500 gdb' &
+	sleep 2; gnome-terminal -x bash -c "msp430-gdb -ex='target remote:2000' $(TARGET).elf" &
 	
 %.o : %.cpp
 	$(CC) $(CCFLAGS) -c $<

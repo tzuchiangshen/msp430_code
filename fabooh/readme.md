@@ -116,7 +116,7 @@ who took some assembler code and just formatted it for 'C'. The code differences
 for TI's CCS and msp430-gcc made writing code that would run in both environments
 painful enough that most people didn't bother with msp430-gcc. The majority of msp430
 developers were using CCS for their projects and code samples.  I used CCS for a while
-but still I wanted someting better, something free with no code size limits.
+but still I wanted something better, something free with no code size limits.
 
 I also really wanted a simple to use API. I wanted to be able to share my code and to use other
 peoples code. I liked the idea of the Arduino API but the implemention isn't really focused
