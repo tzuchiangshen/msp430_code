@@ -56,25 +56,27 @@ Usage
 
 Fabooh assumes a unix or unix-like shell environment (cygwin).  Makefiles drive
 the build process.  It assumes that the msp430-gcc toolchain and mspdebug
-is in your path. If you have a copy of naken430utils, it will use that to
-compute cycle counts of your resulting asm code.
+are in your path. If you have a copy of naken430utils, it will use that to
+compute cycle counts of your resulting asm code. Some of the samples use
+re2c and lemon, which are language development tools.
 
 The directory tree mirrors what is required to run inside the Energia build system.
-(Energia is not needed to use fabooh). However, I'm trying to provide the ability
-to use fabooh as a target platform along side the standard Energia framework.
-This might be useful for people who don't want to run command line make builds
+(note: Energia is not needed to use fabooh). However, it is provided so 'fabooh'
+can be used as a target platform right along side the standard Energia framework.
+This might be useful for people who don't want to run command line builds using
+makefiles.
 
-* examples/ - where you find sample code for fabooh grouped in categories
+* examples/ - where you find sample code for fabooh, grouped in categories
 * msp430/cores/fabooh/ - contains the fabooh framework header files
 * msp430/cores/fabooh/drivers/ - contains peripheral drivers, things like serial, spi, led, lcd
-* msp430/variants/ - these are the "boards" pin mapping for each chip and board supported
+* msp430/variants/ - this is where each supported chip and board's pin mapping are found 
 
 To build all examples:
 <pre>
  $ make clean all 
 </pre>
 
-To build and install the blink example using the defaults (msp430g2553):
+To build and install an individual example using the default (msp430g2553) chip:
 <pre>
  $ cd examples/basic 
  $ make clean all install
@@ -82,14 +84,15 @@ To build and install the blink example using the defaults (msp430g2553):
 
 Some important files.
 
-* includes.mk - contains make rules used by all the samples. If you want to
-switch boards you would edit this and find the line where the board
-and chip files are included
-* include-msp430fr5739.mk - will allow you to compile for the Fraunchpad
-* include-msp430g2231in14.mk - for the launchpad with a g2231 chip, It
-is setup for 16MHz instead of the default 1MHz, you will have to tweak
-the DCO values in cpu430.h for your chip, or change the F_CPU to 1000000
-* include-msp430g2553in29.mk - this is the default using 16MHz g2553 chip
+* common.mk - contains make rules used by all samples. To switch boards,
+edit this file and change the line where the board and chip files are included
+* mkfiles/include-msp430fr5739.mk - configuration for the Fraunchpad FRAM board
+* mkfiles/include-msp430g2231in14.mk - configuration for launchpad with an msp430g2231 chip,
+setup for 16MHz instead of the default 1MHz, note: DCO values must be tweaked
+in cpu430.h for your individual chip, or change the F_CPU=1000000 to run with its only
+precalibrated value
+* mkfiles/include-msp430g2553in29.mk - (default) launchpad configuration 
+using the msp430g2553 chip running at 16MHz
 
 
 Credits
@@ -109,18 +112,19 @@ OOH (to exclaim in amazement)
 
 I started with the msp430 when msp430-gcc didn't know about the value line chips. Most
 of the examples supplied by Texas Instruments looked like they were written by someone
-who took the asm code and just formatted it for 'C'. The small code differences required
-for TIs CCS and msp430-gcc made writing code that would run in both environments
-painful. Most people were using CCS to write code for their projects and code samples.
-I used CCS for a while but still I wanted someting better.  
+who took some assembler code and just formatted it for 'C'. The code differences required
+for TI's CCS and msp430-gcc made writing code that would run in both environments
+painful enough that most people didn't bother with msp430-gcc. The majority of msp430
+developers were using CCS for their projects and code samples.  I used CCS for a while
+but still I wanted someting better, something free with no code size limits.
 
-I really wanted a simple to use API. I wanted to be able to share my code and to use other
+I also really wanted a simple to use API. I wanted to be able to share my code and to use other
 peoples code. I liked the idea of the Arduino API but the implemention isn't really focused
 on small or efficient code.  About a year ago, I started to contribute my time to the
 Energia project. It is a port of Arduino that runs on the msp430 chips. I like it and we do
 try to be as efficient as we can be within the confines of the Arduino framework.
-One of the biggest things we accomplished was to get a larger number of people
-using msp430-gcc.
+The best thing we accomplished with Energia was growing the msp430-gcc userbase adding
+at least 20,000 new users.
 
 This code is my attempt to retain the goodness of the Energia framework while
 trying to be as fast and efficient as I can be without worrying about breaking
