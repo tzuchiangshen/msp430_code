@@ -1,5 +1,5 @@
 /*
- *  cpu430x.h - msp430x cpu using CS clock implementation (msp430fr57xxx)
+ *  cpu430_cs.h - msp430x2 cpu using CS clock implementation (msp430fr57xxx)
  *
  * Created: Dec 12, 2012
  *  Author: rick@kimballsoftware.com
@@ -24,15 +24,15 @@
  *
  */
 
-#ifndef CPU430X_H
-#define CPU430X_H
+#ifndef CPU430_CS_H
+#define CPU430_CS_H
 
 #ifdef __MSP430_HAS_CS__
 
 #include "cpu.h"
 
 template <unsigned long FREQ=F_CPU>
-struct cpu430x_t {
+struct cpu430_cs_t {
 	static const unsigned long MCLK_FREQ=FREQ;
 
 	static void init_clock_impl(void) {
@@ -57,11 +57,14 @@ struct cpu430x_t {
 #else
 #warning F_CPU is not a know frequency value
 #endif
-      //P3DIR |= BIT4; P3SEL0 |= BIT4; P3SEL1 |= BIT4; /* clockout */
   }
+
+	static void enable_clkout(void) {
+	  P3DIR |= BIT4; P3SEL0 |= BIT4; P3SEL1 |= BIT4; /* clockout */
+	}
 };
 
-typedef cpu_t<cpu430x_t<F_CPU> > CPU;
+typedef cpu_base_t<cpu430_cs_t<F_CPU> > CPU;
 
 #endif /* __MSP430_HAS_CS__ */
-#endif /* CPU430X_H */
+#endif /* CPU430_CS_H */

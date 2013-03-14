@@ -26,6 +26,7 @@
 
 #ifndef CPU_H_
 #define CPU_H_
+#include <msp430.h>
 
 /*
  * cpu_t - provide CPU related functions
@@ -33,7 +34,7 @@
  * uint32_t FREQ - cpu frequency in Hz
  */
 template<typename CPU_T>
-struct cpu_t {
+struct cpu_base_t {
     static const unsigned long frequency = CPU_T::MCLK_FREQ;
     static const unsigned long msec_cycles = frequency/1000;
     static const unsigned long usec_cycles = frequency/1000000;
@@ -45,6 +46,12 @@ struct cpu_t {
       CPU_T::init_clock_impl();
     }
 
+    /*
+     * enable_clkout() - output the MCLK to a pin
+     */
+    static void enable_clkout() {
+      CPU_T::enable_clkout_impl();
+    }
 };
 
 #define delay_msecs(msec) __delay_cycles(CPU::msec_cycles * msec)
@@ -55,9 +62,9 @@ struct cpu_t {
 #define delayMicroseconds(usec) __delay_cycles(CPU::usec_cycles * usec)
 
 #if defined(__MSP430_HAS_BC2__)
-#include "drivers/cpu430.h"
+#include "drivers/cpu430_bc2.h"
 #elif defined(__MSP430_HAS_CS__)
-#include "drivers/cpu430x.h"
+#include "drivers/cpu430_cs.h"
 #else
 #error Unsupport CPU detected!
 #endif

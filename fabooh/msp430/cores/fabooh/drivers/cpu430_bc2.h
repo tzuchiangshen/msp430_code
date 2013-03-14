@@ -1,10 +1,10 @@
 /*
- *  cpu430.h - msp430 BCS+ implementation
+ *  cpu430_bc2.h - msp430 Basic Clock Module+ implementation
  *
  * Created: Dec 12, 2012
  *  Author: rick@kimballsoftware.com
- *    Date: 03-02-2013
- * Version: 1.0.1
+ *    Date: 03-14-2013
+ * Version: 1.0.2
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -24,13 +24,13 @@
  *
  */
 
-#ifndef CPU430_H
-#define CPU430_H
+#ifndef CPU430_BC2_H
+#define CPU430_BC2_H
 
 #include "cpu.h"
 
 template <unsigned long FREQ=F_CPU>
-struct cpu430_t {
+struct cpu430_bc2_t {
 	static const unsigned long MCLK_FREQ=FREQ;
 
   static void init_clock_impl(void) {
@@ -65,8 +65,12 @@ struct cpu430_t {
       // use default clock .. varies on each chip
     }
   }
+
+  static void enable_clkout(void) {
+    P1SEL |= BIT4; P1DIR |= BIT4;
+  }
 };
 
-typedef cpu_t<cpu430_t<F_CPU> > CPU;
+typedef cpu_base_t<cpu430_bc2_t<F_CPU> > CPU;
 
-#endif /* CPU430_H */
+#endif /* CPU430_BC2_H */
