@@ -47,7 +47,7 @@ Dependencies
 ------------
 
 fabooh needs msp430-gcc version 4.6.3 or above. You can get a prebuilt mps430-gcc
-binary for windows, OSX, or linux by downloading the Energia IDE ( http://energia.nu/downloads )
+binary for windows, OSX, or linux by downloading the Energia IDE ( http://energia.nu/download )
 Energia is not required to use fabooh. However, some people do find its build environment easy
 to use.
 
