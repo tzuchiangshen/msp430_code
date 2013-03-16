@@ -5,6 +5,7 @@
  *      Author: kimballr
  */
 #include <fabooh.h>
+#define SMALL_INIT4 /* don't initialize .bss and .data sections */
 #include <main.h>
 #include <serial.h>
 

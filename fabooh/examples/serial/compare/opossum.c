@@ -1,5 +1,5 @@
 /*
- * opussum.c - comparing good straight c code to fabooh
+ * opossum.c - comparing good straight c code to fabooh
  *
  * See post here:
  * http://forum.43oh.com/topic/1643-g2553-hardware-uart-hello-world-example/?p=31310
