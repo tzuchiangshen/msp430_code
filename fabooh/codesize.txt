@@ -1,0 +1,16 @@
+   text	   data	    bss	    dec	    hex	filename
+    500	      2	      0	    502	    1f6	./examples/energia_ide_examples/serial/ascii_table_extended/ascii_table_extended.elf
+    158	      0	      0	    158	     9e	./examples/energia_ide_examples/blink/blink.elf
+   1622	      0	      0	   1622	    656	./examples/isp_programmers/avr910/avr910.elf
+    458	      0	      2	    460	    1cc	./examples/serial/ascii_table_extended.elf
+    150	      0	      0	    150	     96	./examples/serial/hello_world.elf
+    464	      0	      2	    466	    1d2	./examples/serial/ascii_table.elf
+    242	      0	      0	    242	     f2	./examples/serial/echo.elf
+    494	      0	      0	    494	    1ee	./examples/serial/compare/notopossum.elf
+    578	      0	      0	    578	    242	./examples/serial/compare/opossum.elf
+    156	      0	      0	    156	     9c	./examples/basic/blink.elf
+    300	      0	      0	    300	    12c	./examples/led/ws2811_basic.elf
+  12084	      0	      2	  12086	   2f36	./examples/math/sin_table.elf
+   1264	      0	      2	   1266	    4f2	./examples/math/cordic/cordic_table.elf
+    816	      0	      0	    816	    330	./examples/lcd/nokia5110_logo.elf
+    210	      0	      0	    210	     d2	./examples/spi/spi_bb.elf

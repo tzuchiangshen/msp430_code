@@ -4,6 +4,8 @@
 # includes.mk can be used to change MCU and BOARD variants
 #
 
+.PHONY: clean sizes
+
 all:
 	@make -C examples/basic all
 	@make -C examples/led all
@@ -23,4 +25,7 @@ clean:
 	@make -C examples/energia_ide_examples/blink clean
 	@make -C examples/energia_ide_examples/serial/ascii_table_extended clean
 	@make -C examples/spi clean
-	
+
+sizes:
+	find . -name '*.elf' -print | xargs msp430-size >newsize.txt
+	diff newsize.txt codesize.txt
