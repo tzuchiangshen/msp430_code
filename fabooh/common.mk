@@ -12,7 +12,7 @@ FABOOH_PLATFORM?=$(FABOOH_DIR)/msp430
 
 # pick a board, just uncomment one of the includes below
 
-#include $(FABOOH_DIR)/mkfiles/nclude-msp430g2231in14.mk
+#include $(FABOOH_DIR)/mkfiles/include-msp430g2231in14.mk
 include $(FABOOH_DIR)/mkfiles/include-msp430g2553in20.mk
 #include $(FABOOH_DIR)/mkfiles/include-msp430fr5739.mk
 

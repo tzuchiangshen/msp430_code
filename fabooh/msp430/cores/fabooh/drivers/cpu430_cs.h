@@ -32,10 +32,11 @@
 #include "cpu.h"
 
 template <unsigned long FREQ=F_CPU>
-struct cpu430_cs_t {
+struct cpu430_cs_t
+    : cpu_base_t<F_CPU> {
 	static const unsigned long MCLK_FREQ=FREQ;
 
-	static void init_clock_impl(void) {
+	static void init_clock(void) {
 
 	  CSCTL0 = CSKEY;                // Enable Access to CS Registers
     CSCTL2 &= ~SELM_7;             // Clear selected Main CLK Source
@@ -64,7 +65,7 @@ struct cpu430_cs_t {
 	}
 };
 
-typedef cpu_base_t<cpu430_cs_t<F_CPU> > CPU;
+typedef cpu430_cs_t<F_CPU> CPU;
 
 #endif /* __MSP430_HAS_CS__ */
 #endif /* CPU430_CS_H */

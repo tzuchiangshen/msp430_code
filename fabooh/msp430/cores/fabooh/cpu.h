@@ -29,37 +29,16 @@
 #include <msp430.h>
 
 /*
- * cpu_t - provide CPU related functions
+ * cpu_base_t - provide CPU related functions
  *
  * uint32_t FREQ - cpu frequency in Hz
  */
-template<typename CPU_T>
+template<uint32_t MCLK_FREQ>
 struct cpu_base_t {
-    static const unsigned long frequency = CPU_T::MCLK_FREQ;
+    static const unsigned long frequency = MCLK_FREQ;
     static const unsigned long msec_cycles = frequency/1000;
     static const unsigned long usec_cycles = frequency/1000000;
-
-    /*
-     * init_clock() - initialize main clock to frequency
-     */
-    static void init_clock(void) {
-      CPU_T::init_clock_impl();
-    }
-
-    /*
-     * enable_clkout() - output the MCLK to a pin
-     */
-    static void enable_clkout() {
-      CPU_T::enable_clkout_impl();
-    }
 };
-
-#define delay_msecs(msec) __delay_cycles(CPU::msec_cycles * msec)
-#define delay_usecs(usec) __delay_cycles(CPU::usec_cycles * usec)
-
-// arduino style
-#define delay(msec) __delay_cycles(CPU::msec_cycles * msec)
-#define delayMicroseconds(usec) __delay_cycles(CPU::usec_cycles * usec)
 
 #if defined(__MSP430_HAS_BC2__)
 #include "drivers/cpu430_bc2.h"
@@ -68,5 +47,12 @@ struct cpu_base_t {
 #else
 #error Unsupport CPU detected!
 #endif
+
+#define delay_msecs(msec) __delay_cycles(CPU::msec_cycles * msec)
+#define delay_usecs(usec) __delay_cycles(CPU::usec_cycles * usec)
+
+// arduino style
+#define delay(msec) __delay_cycles(CPU::msec_cycles * msec)
+#define delayMicroseconds(usec) __delay_cycles(CPU::usec_cycles * usec)
 
 #endif /* CPU_H_ */
