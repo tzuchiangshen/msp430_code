@@ -21,7 +21,6 @@ include $(FABOOH_DIR)/mkfiles/include-msp430g2553in20.mk
 # or by putting it in their makefiles
 FLAGS?=
 USEROBJS?=
-USERCLEAN?=
 LDLIBS?=
 
 # tools we use
@@ -68,7 +67,9 @@ clean:
 	@rm -f $(TARGET)_asm_count.txt
 	@rm -f $(TARGET).hex
 	@rm -f $(TARGET).map
+ifdef USERCLEAN
 	rm -f $(USERCLEAN)
+endif
  
 install: all
 	$(MSPDEBUG) rf2500 "prog $(TARGET).elf"
