@@ -22,7 +22,7 @@ namespace {
 inline void setup() {
   Serial.begin(BAUD_RATE);
 
-  Serial.print("Hello world!\n");
+  Serial << "Hello world!\n";
 }
 
 inline void loop() {
