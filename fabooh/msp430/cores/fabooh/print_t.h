@@ -5,8 +5,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 03-03-2013
- * Version: 1.0.1
+ *    Date: 03-16-2013
+ * Version: 1.0.2
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -293,9 +293,7 @@ public:
     return static_cast<Writer*>(this)->write_impl(c);
   }
 
-  /* TODO: avoided println(n) functions to discourage usage, as they causes bloat */
-  /* TODO: work out a scheme to allow specialization of _print_base method */
-
+  /* TODO: explain why I avoided println(n) functions to discourage usage, as they causes bloat */
 
 private:
 
@@ -353,7 +351,7 @@ private:
 // Serial << 1234; // print ascii decimal version of 1234
 
 template<typename PRINT_T, typename T>
-inline PRINT_T &operator << (PRINT_T &obj, T arg) {
+inline PRINT_T &operator << (PRINT_T &obj, const T arg) {
   obj.print(arg); return obj;
 }
 
