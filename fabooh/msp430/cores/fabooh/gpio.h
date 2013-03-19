@@ -57,7 +57,8 @@ enum pin_value {
  *
  */
 template <
-    u8_CSFR pin
+    const int portno
+    ,u8_CSFR pin
     ,u8_SFR pout
     ,u8_SFR pdir
     ,u8_SFR psel
@@ -71,6 +72,7 @@ struct GPIO_PORT_BASE0 {
     static u8_SFR PREN()  { return pren; }
     static yesno_e hasPSEL2() { return NO; }
     static yesno_e hasInterrupt() { return NO; }
+    static const int _portno = portno;
 
     /**
      * pin direction configuration methods
@@ -141,7 +143,8 @@ struct GPIO_PORT_BASE0 {
  */
 
 template <
-    u8_CSFR pin
+    const int portno
+    ,u8_CSFR pin
     ,u8_SFR pout
     ,u8_SFR pdir
     ,u8_SFR psel
@@ -149,7 +152,7 @@ template <
     ,u8_SFR pren
 >
 struct GPIO_PORT_BASE2 :
-  GPIO_PORT_BASE0<pin,pout,pdir,psel,pren>
+  GPIO_PORT_BASE0<portno,pin,pout,pdir,psel,pren>
 {
     static u8_SFR PSEL2() { return psel2; }
     static yesno_e hasPSEL2() { return YES; }
@@ -161,7 +164,8 @@ struct GPIO_PORT_BASE2 :
 */
 
 template <
-  u8_CSFR pin
+  const int portno
+  ,u8_CSFR pin
   ,u8_SFR pout
   ,u8_SFR pdir
   ,u8_SFR pifg
@@ -171,7 +175,7 @@ template <
   ,u8_SFR pren
 >
 struct GPIO_PORT0 :
-GPIO_PORT_BASE0<pin,pout,pdir,psel,pren>
+GPIO_PORT_BASE0<portno,pin,pout,pdir,psel,pren>
 {
   static u8_SFR PIFG()  { return pifg; }
   static u8_SFR PIES()  { return pies; }
@@ -187,7 +191,8 @@ GPIO_PORT_BASE0<pin,pout,pdir,psel,pren>
  */
 
 template <
-    u8_CSFR pin
+    const int portno
+    ,u8_CSFR pin
     ,u8_SFR pout
     ,u8_SFR pdir
     ,u8_SFR pifg
@@ -198,7 +203,7 @@ template <
     ,u8_SFR pren
 >
 struct GPIO_PORT :
-  GPIO_PORT_BASE2<pin,pout,pdir,psel,psel2,pren>
+  GPIO_PORT_BASE2<portno, pin,pout,pdir,psel,psel2,pren>
 {
     static u8_SFR PIFG()  { return pifg; }
     static u8_SFR PIES()  { return pies; }
@@ -208,14 +213,40 @@ struct GPIO_PORT :
 };
 
 /*
- * GPIO_PIN<> - pin template
+ * gpio_pincaps_t - gpio_pin capabilities
  *
+ * @desc: provide boolean tests that describe the capabilities
+ *       of a GPIO_PIN
+ */
+template<
+  bool active_low = false
+  ,bool uart_tx_pin = false
+  ,bool uart_rx_pin = false
+  ,bool spi_sclk_pin = false
+  ,bool spi_mosi_pin = false
+  ,bool spi_mis0_pin = false
+>
+struct gpio_pincaps_t {
+  static const bool is_active_low = active_low;
+  static const bool canbe_uart_tx = uart_tx_pin;
+  static const bool canbe_uart_rx = uart_rx_pin;
+};
+
+typedef gpio_pincaps_t<true> gpio_pin_button;
+typedef gpio_pincaps_t<true,true> gpio_pin_uart_tx;
+typedef gpio_pincaps_t<true,false,true> gpio_pin_uart_rx;
+typedef gpio_pincaps_t<false,false,false,true> gpio_pin_spi_sclk;
+
+/*
+ * GPIO_PIN<> - pin template
  */
 
-template <const uint8_t MASK, typename PORT>
+template <const uint8_t MASK, typename PORT, typename CAPS_T = gpio_pincaps_t<> >
 struct GPIO_PIN {
     typedef GPIO_PIN<MASK,PORT> T;
     static const uint8_t pin_mask=MASK;
+    static const int _portno = PORT::_portno;
+    typedef CAPS_T pin_cap;
 
     static u8_CSFR PIN()  { return PORT::PIN();  }
     static u8_SFR POUT()  { return PORT::POUT(); }
@@ -231,27 +262,38 @@ struct GPIO_PIN {
     /*
      * pin direction functions
      */
-
     ALWAYS_INLINE static void setmode_input() {
       PORT::PDIR() &= ~MASK;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void setmode_inputpullup() {
       PORT::PDIR() &= ~MASK;
       high();
       PORT::PREN() |= MASK;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void setmode_inputpulldown() {
       PORT::PDIR() &= ~MASK;
       low();
       PORT::PREN() |= MASK;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void setmode_output() {
       PORT::PDIR() |= MASK;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void set_mode(const pin_mode mode) {
         if ( 0 ) {
         }
@@ -272,15 +314,39 @@ struct GPIO_PIN {
     /*
      * pin query functions
      */
-
     ALWAYS_INLINE static unsigned read() {
       return (PORT::PIN() & MASK ) != 0;
     }
 
     /*
+     *
+     */
+    ALWAYS_INLINE static unsigned is_low() {
+      return (PORT::PIN() & MASK ) == 0;
+    }
+
+    /*
+     *
+     */
+    ALWAYS_INLINE static unsigned is_high() {
+      return (PORT::PIN() & MASK ) != 0;
+    }
+
+    /*
+     *
+     */
+    ALWAYS_INLINE static unsigned is_pushed() {
+      if ( pin_cap::is_active_low ) {
+        return is_low();
+      }
+      else {
+        return is_high();
+      }
+    }
+
+    /*
      * pin modification functions
      */
-
     ALWAYS_INLINE static void write(pin_value value) {
         if (value == HIGH) {
             high();
@@ -290,23 +356,31 @@ struct GPIO_PIN {
         }
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void high() {
-      if ( MASK )
-        PORT::POUT() |= MASK;
+      PORT::POUT() |= MASK;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void low() {
       if ( MASK )
         PORT::POUT() &= ~MASK;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void toggle() {
       if ( MASK )
         PORT::POUT() ^= MASK;
     }
 
     /*
-     * port wide (8bits) direction using pin as port
+     * port wide (8bits) set direction using pin as port
      */
     ALWAYS_INLINE static void set_modes(const uint8_t pins_mask, pin_mode mode) {
       PORT::set_mode(pins_mask, mode);
@@ -319,10 +393,16 @@ struct GPIO_PIN {
       PORT::POUT() |= pins_mask;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void clear_pins(const uint8_t pins_mask) {
       PORT::POUT() &= ~pins_mask;
     }
 
+    /*
+     *
+     */
     ALWAYS_INLINE static void toggle_pins(const uint8_t pins_mask) {
       PORT::POUT() ^= pins_mask;
     }
@@ -366,8 +446,10 @@ struct DummyGPIO {
         static uint8_t PINMASK() { return 0; }
 
         static void set_mode(const uint8_t, pin_mode) {}
+        static const int _portno = 0;
     } port;
     static const uint8_t pin_mask=0;
+    static const int _portno = 0;
 
     static void setmode_input() {}
     static void setmode_inputpullup() {}
@@ -385,18 +467,20 @@ struct DummyGPIO {
 
 typedef DummyGPIO<0> NO_PIN;
 
+template<typename P1, typename P2>
+struct is_same_port {
+  enum  { yes_no = (P1::_portno == P2::_portno) ? 1 : 0 };
+};
+
+
 /*
  * port helper macros
  * assumes all pins are from the same port, no check performed , user tasked with being smart
  *
  */
-#define portMode(B0,B1, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask),_mode);
-#define portMode3(B0,B1,B2, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask|B2::pin_mask),_mode);
-#define portMode4(B0,B1,B2,B3, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask|B2::pin_mask|B3::pin_mask),_mode);
+#define port_mode(B0,B1, _mode) B0::set_modes((const uint8_t)(B0::pin_mask|B1::pin_mask),_mode);
 
-#define portToggle(B0,B1) B0::toggle_pins(B0::pin_mask|B1::pin_mask);
-#define portToggle3(B0,B1,B2) B0::toggle_pins(B0::pin_mask|B1::pin_mask|B2::pin_mask);
-#define portToggle4(B0,B1,B2,B3) B0::toggle_pins(B0::pin_mask|B1::pin_mask|B2::pin_mask|B3::pin_mask);
+#define port_toggle(B0,B1) B0::toggle_pins(B0::pin_mask|B1::pin_mask);
 
 /*
  * nod to Arduino API

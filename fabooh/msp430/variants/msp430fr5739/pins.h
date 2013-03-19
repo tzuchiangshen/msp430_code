@@ -33,7 +33,8 @@
  */
 #ifdef __MSP430_HAS_PORT1_R__
  typedef GPIO_PORT<
-         PAIN_L
+         1
+         ,PAIN_L
          ,PAOUT_L
          ,PADIR_L
          ,PAIFG_L
@@ -61,7 +62,8 @@
 #ifdef __MSP430_HAS_PORT2_R__
 
  typedef GPIO_PORT<
-         PAIN_H
+         2
+         ,PAIN_H
          ,PAOUT_H
          ,PADIR_H
          ,PAIFG_H
@@ -88,7 +90,8 @@
   */
 #ifdef __MSP430_HAS_PORT3_R__
  typedef GPIO_PORT<
-         PBIN_L
+         3
+         ,PBIN_L
          ,PBOUT_L
          ,PBDIR_L
          ,PBIFG_L
@@ -115,7 +118,8 @@
   */
 #ifdef __MSP430_HAS_PORT4_R__
  typedef GPIO_PORT<
-         PBIN_H
+         4
+         ,PBIN_H
          ,PBOUT_H
          ,PBDIR_H
          ,PBIFG_H
@@ -136,7 +140,8 @@
   */
 #ifdef __MSP430_HAS_PORTJ_R__
  typedef GPIO_PORT_BASE2<
-         PJIN_L
+         5
+         ,PJIN_L
          ,PJOUT_L
          ,PJDIR_L
          ,PJSEL0_L
@@ -171,8 +176,8 @@
 #endif
 
 #ifdef __MSP430_HAS_PORT4_R__
- typedef P4_0 PUSH1;
- typedef P4_1 PUSH2;
+ typedef GPIO_PIN<BIT0,P4,gpio_pin_button> PUSH1;
+ typedef GPIO_PIN<BIT1,P4,gpio_pin_button> PUSH2;
 #endif
 
  typedef P2_0 TX_PIN;

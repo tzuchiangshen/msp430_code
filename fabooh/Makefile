@@ -1,7 +1,7 @@
 #
 # Makefile - top level make for fabooh examples
 #
-# includes.mk can be used to change MCU and BOARD variants
+# common.mk is used to select MCU and BOARD variants
 #
 
 .PHONY: clean sizes
@@ -14,7 +14,7 @@ all:
 	@make -C examples/serial all
 	@make -C examples/energia_ide_examples/blink all
 	@make -C examples/energia_ide_examples/serial/ascii_table_extended all
-	@make -C examples/spi all
+	#@make -C examples/spi all
 
 clean:
 	@make -C examples/basic clean

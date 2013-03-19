@@ -47,4 +47,9 @@ struct serial_default_t:
 {
 };
 
+// TODO: implement a Timer based versoin
+// TODO: enhanced software only one triggered by port pin
+// TODO: add time out option
+// TODO: add ringbuffer implementations
+
 #endif

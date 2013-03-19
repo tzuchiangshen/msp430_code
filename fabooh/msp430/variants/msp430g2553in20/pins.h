@@ -33,7 +33,8 @@
 #ifdef __MSP430_HAS_PORT1_R__
 
  typedef GPIO_PORT<
-          P1IN
+         1
+         ,P1IN
          ,P1OUT
          ,P1DIR
          ,P1IFG
@@ -55,7 +56,7 @@
 
  typedef GPIO_PIN<BIT0,P1> RED_LED;
  typedef GPIO_PIN<BIT6,P1> GREEN_LED;
- typedef GPIO_PIN<BIT3,P1> PUSH2;
+ typedef GPIO_PIN<BIT3,P1, gpio_pin_button> PUSH2;
  typedef P1_1 RX_PIN;
  typedef P1_2 TX_PIN;
  typedef P1_5 SCLK;
@@ -70,7 +71,8 @@
 #ifdef __MSP430_HAS_PORT2_R__
 
 typedef GPIO_PORT<
-        P2IN
+        2
+        ,P2IN
         ,P2OUT
         ,P2DIR
         ,P2IFG

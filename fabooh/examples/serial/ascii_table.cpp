@@ -28,7 +28,16 @@ typedef unsigned counter_t; /* type we use for counting from ' ' -> '~' */
 //------- file space globals ------
 namespace {
   const uint32_t BAUD_RATE=9600;
-  serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, RX_PIN> Serial; // xmit only serial
+  //serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, RX_PIN> Serial; // xmit only serial
+
+  template <uint32_t BAUD, uint32_t MCLK_HZ,
+            typename TXPIN, typename RXPIN>
+  struct serial_sw_t:
+    serial_base_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>,
+    print_t<serial_sw_t<BAUD, MCLK_HZ, TXPIN, RXPIN>, uint16_t, uint32_t >
+  {
+  };
+  serial_sw_t<BAUD_RATE, CPU::frequency, TX_PIN, RX_PIN> Serial; // xmit only serial
 
 #if defined(NO_DATA_INIT)
   counter_t thisByte; // use less code by initializing in setup()

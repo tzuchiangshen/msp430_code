@@ -33,8 +33,7 @@ void loop() {
       break;
 
     case '\r':
-      Serial.print(prompt);
-      break;
+      return;
 
     default:
       Serial.write(c);
