@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 03-??-2013
- * Version: 1.0.4
+ *    Date: 03-19-2013
+ * Version: 1.0.5
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
