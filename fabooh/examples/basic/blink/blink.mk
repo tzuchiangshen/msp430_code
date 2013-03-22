@@ -5,4 +5,4 @@
 TARGET?=blink
 LDLIBS?=
 
-include ../../common.mk
+include ../../../common.mk

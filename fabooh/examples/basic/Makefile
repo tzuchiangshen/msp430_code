@@ -1,9 +1,5 @@
 all:
-	@make -f blink.mk all
+	make -C blink all
 
 clean:
-	@make -f blink.mk clean
-
-install: all
-	@make -f blink.mk install
-
+	make -C blink clean
