@@ -137,7 +137,7 @@ do that in straight 'C' and msp430 asm without some really convoluted macros.
 Fabooh favors compile time decisions over runtime ones. The gpio class
 templates assume you know at compile time which pins and ports you want
 to use and the code doesn't end up using any flash or ram space at runtime
-trying to figure that out. Constrast that with the table look up scheme
+trying to figure that out. Contrast that with the table look up scheme
 that is done at runtime with Arduino based frameworks. The Arduino scheme
 uses up time, flash and ram space that isn't in excess on the small msp430
 value line chips.  I think you will like the results achieved with the minor
