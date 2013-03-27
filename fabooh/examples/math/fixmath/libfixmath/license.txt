@@ -1,0 +1,7 @@
+All the code in directory is from the libfixmath project:
+
+According to the site it is an MIT License
+
+More details here:
+
+https://code.google.com/p/libfixmath/
