@@ -3,8 +3,8 @@
  *
  * Created: Nov-12-2012
  *  Author: rick@kimballsoftware.com
- *    Date: 02-28-2013
- * Version: 1.0.0
+ *    Date: 03-27-2013
+ * Version: 1.0.1
  *
  * =========================================================================
  *  Copyright © 2013 Rick Kimball
@@ -33,8 +33,10 @@
 
 template<unsigned SIZE>
 struct is_power_of_two {
-    enum {val = (SIZE >= 2) & (SIZE > 1) & !(SIZE & (SIZE - 1))};
-    static const unsigned badSIZE[(val == 1) ? 1 : -1]; // SIZE is not a power of 2 if you error here.
+  enum {val = (SIZE >= 2) & (SIZE > 1) & !(SIZE & (SIZE - 1))};
+  static const unsigned badSIZE[(val == 1) ? 1 : -1]; // SIZE is not a power of 2 if you error here.
 };
+
+enum yesno_e { NO=0, YES=1 };
 
 #endif /* LOGIC_H_ */
