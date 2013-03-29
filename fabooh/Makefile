@@ -15,6 +15,7 @@ all:
 	@make -C examples/energia_ide_examples/blink all
 	@make -C examples/energia_ide_examples/serial/ascii_table_extended all
 	#@make -C examples/spi all
+	@make -C examples/adc all
 
 clean:
 	@make -C examples/basic clean
@@ -25,6 +26,7 @@ clean:
 	@make -C examples/energia_ide_examples/blink clean
 	@make -C examples/energia_ide_examples/serial/ascii_table_extended clean
 	@make -C examples/spi clean
+	@make -C examples/adc clean
 
 sizes:
 	find . -name '*.elf' -exec msp430-size {} \; | sort -u -n >newsize.txt
