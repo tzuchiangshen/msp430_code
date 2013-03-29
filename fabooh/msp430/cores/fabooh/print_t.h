@@ -91,7 +91,6 @@ private:
   void _print_base(T n, const base_e base) {
     char buf[(8 * sizeof(T)) + 1]; // (8 bits * N bytes) + 1 for NULL
     char *str = &buf[sizeof(buf) - 1];
-    //unsigned dp = ((base & 0xF0) >> 8);
 #if 0
     P1_0::high(); /* toggle on for debug timing */
 #endif
@@ -107,22 +106,6 @@ private:
 #endif
 
     _puts(str);
-
-#if 0
-    if ( dp ) {
-      do {
-        if ( *str ) {
-          write(*str++);
-        }
-        else {
-          write((uint8_t)'0');
-        }
-      } while(--dp);
-    }
-    else {
-      _puts(str);
-    }
-#endif
   }
 
   void _puts(const unsigned char *s) {
@@ -136,7 +119,7 @@ private:
   }
 
 
-  //--------------------------------------- = digits---------------------
+  //------------------------------------------------------------
   // public
   //------------------------------------------------------------
 public:
@@ -373,7 +356,6 @@ private:
    * _printFloat() - .. hmmm do you really want to use this?
    *
    * hint: .. probably not!
-   *x)
    */
 
   void _print_float(float number, unsigned digits) {
