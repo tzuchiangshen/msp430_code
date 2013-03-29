@@ -29,14 +29,18 @@ LD = msp430-gcc
 MSPDEBUG = mspdebug
 MSP430_STDLST = $(FABOOH_DIR)/tools/msp430-stdlst
 
+FIXMATH_FLAGS=-DFIXMATH_NO_CACHE -DFIXMATH_NO_64BIT -DFIXMATH_NO_ROUNDING
+
 INCLUDE=-I $(FABOOH_PLATFORM)/cores/$(CORE) \
 		-I $(FABOOH_PLATFORM)/variants/$(BOARD) \
-		-I $(FABOOH_PLATFORM)/cores/$(CORE)/drivers
+		-I $(FABOOH_PLATFORM)/cores/$(CORE)/drivers \
+		-I $(FABOOH_PLATFORM)/third_party
 
 CFLAGS= -g -Os -Wall -Wunused -mdisable-watchdog \
  		-fdata-sections -ffunction-sections -MMD \
 		-fwrapv -fomit-frame-pointer \
 		-mmcu=$(MCU) -DF_CPU=$(F_CPU) $(INCLUDE) \
+		$(FIXMATH_FLAGS) \
 		$(STACK_CHECK) $(FLAGS)
 
 ASFLAGS = $(CFLAGS)

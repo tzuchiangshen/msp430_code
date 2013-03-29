@@ -4,20 +4,19 @@
 
 TARGET?=fixmath_table
 LDLIBS?=
-USEROBJS=fix16_trig.o fix16.o fix16_str.o
+USEROBJS=fix16_trig.o fix16.o
 
 #
 # minimize size by turning off some memory and flash hungry features
 #
-FLAGS=-DFIXMATH_NO_CACHE -DFIXMATH_NO_64BIT -DFIXMATH_NO_ROUNDING
+
+THIRD_PARTY_DIR=$(FABOOH_PLATFORM)/third_party
+
 
 include ../../../common.mk
 
-fix16_trig.o: libfixmath/fix16_trig.c
+fix16_trig.o: $(THIRD_PARTY_DIR)/libfixmath/fix16_trig.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-fix16.o: libfixmath/fix16.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-fix16_str.o: libfixmath/fix16_str.c
+fix16.o: $(THIRD_PARTY_DIR)/libfixmath/fix16.c
 	$(CC) $(CFLAGS) -c $< -o $@

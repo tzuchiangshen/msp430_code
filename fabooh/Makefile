@@ -27,5 +27,5 @@ clean:
 	@make -C examples/spi clean
 
 sizes:
-	( find . -name '*.elf' -print | xargs msp430-size | sort ) >newsize.txt
+	find . -name '*.elf' -exec msp430-size {} \; | sort -u -n >newsize.txt
 	diff newsize.txt codesize.txt

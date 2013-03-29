@@ -11,3 +11,4 @@ clean:
 	make -f ascii_table_extended.mk clean
 	make -f echo.mk clean
 	make -C compare clean
+	make -C calc clean

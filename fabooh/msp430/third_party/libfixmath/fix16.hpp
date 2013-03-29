@@ -141,7 +141,7 @@ class Fix16 {
 		const int operator> (const float other)   const { return (value >  fix16_from_float(other)); }
 		const int operator> (const int16_t other) const { return (value >  fix16_from_int(other));   }
 
-		Fix16  sin() { return Fix16(fix16_sin(value));  }
+    Fix16  sin() { return Fix16(fix16_sin(value));  }
 		Fix16  cos() { return Fix16(fix16_cos(value));  }
 		Fix16  tan() { return Fix16(fix16_tan(value));  }
 		Fix16 asin() { return Fix16(fix16_asin(value)); }
@@ -149,6 +149,9 @@ class Fix16 {
 		Fix16 atan() { return Fix16(fix16_atan(value)); }
 		Fix16 atan2(const Fix16 &inY) { return Fix16(fix16_atan2(value, inY.value)); }
 		Fix16 sqrt() { return Fix16(fix16_sqrt(value)); }
+
+    Fix16 sind() { return Fix16(fix16_sin(fix16_deg_to_rad(value))); }
+    Fix16 cosd() { return Fix16(fix16_cos(fix16_deg_to_rad(value))); }
 };
 
 #endif

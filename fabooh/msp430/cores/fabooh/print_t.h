@@ -91,6 +91,7 @@ private:
   void _print_base(T n, const base_e base) {
     char buf[(8 * sizeof(T)) + 1]; // (8 bits * N bytes) + 1 for NULL
     char *str = &buf[sizeof(buf) - 1];
+    //unsigned dp = ((base & 0xF0) >> 8);
 #if 0
     P1_0::high(); /* toggle on for debug timing */
 #endif
@@ -106,6 +107,22 @@ private:
 #endif
 
     _puts(str);
+
+#if 0
+    if ( dp ) {
+      do {
+        if ( *str ) {
+          write(*str++);
+        }
+        else {
+          write((uint8_t)'0');
+        }
+      } while(--dp);
+    }
+    else {
+      _puts(str);
+    }
+#endif
   }
 
   void _puts(const unsigned char *s) {
@@ -119,7 +136,7 @@ private:
   }
 
 
-  //------------------------------------------------------------
+  //--------------------------------------- = digits---------------------
   // public
   //------------------------------------------------------------
 public:
@@ -179,10 +196,12 @@ public:
   }
 
   void print(uint32_t u, const base_e base=DEC) {
-    if (base)
+    if (base) {
       _print_base<u32_print_t>(u, base);
-    else
+    }
+    else {
       write((uint8_t)u);
+    }
   }
 
   //----------------- specials --------------------------
@@ -197,11 +216,18 @@ public:
   }
 
   /*
+   * print() - fix16_t fixed point values
+   */
+  void print(const fix16_t value, const unsigned digits) {
+    _print_fix16(value, digits > 5 ? 5 : digits);
+  }
+
+  /*
    * print(float) - probably should be avoided if you care about small size code
    *
    */
   void print(float f, unsigned decimal_places) {
-    return _printFloat(f, decimal_places);
+    return _print_float(f, decimal_places);
   }
 
   /*
@@ -298,13 +324,59 @@ public:
 private:
 
   /*
+   * _print_fix16() - similar to fix16_to_str routines
+   *
+   *  optimized to use write routines so less stack is used
+   */
+  void _print_fix16(const fix16_t value, const unsigned digits) {
+    /* 5 decimals is enough for full fix16_t precision */
+    static const uint32_t scales[8] = { 1, 10, 100, 1000, 10000, 100000, 100000, 100000 };
+
+    uint32_t uvalue = (value >= 0) ? value : -value;
+    /* print integer results */
+    if (value < 0) {
+      write((uint8_t) '-');
+    }
+
+    /* Separate the integer and decimal parts of the value */
+    unsigned int_part = uvalue >> 16;
+    uint32_t remainder = uvalue & 0xFFFF;
+    uint32_t scale = scales[digits & 7];
+    remainder = fix16_mul(remainder, scale);
+
+    if (remainder >= scale) {
+      /* Handle carry from decimal part */
+      int_part++;
+      remainder -= scale;
+    }
+
+    print(int_part);
+
+    /* print decimal results with zero fill */
+    if (digits > 0) {
+      write((uint8_t)'.');
+      bool skip = false;
+
+      while (scale/=10) {
+        unsigned digit = (remainder / scale);
+
+        if (!skip || digit || scale == 1) {
+          skip = false;
+          write((uint8_t)('0' + digit));
+          remainder %= scale;
+        }
+      }
+    }
+  }
+
+  /*
    * _printFloat() - .. hmmm do you really want to use this?
    *
    * hint: .. probably not!
-   *
+   *x)
    */
 
-  void _printFloat(float number, unsigned digits) {
+  void _print_float(float number, unsigned digits) {
     // Handle negative numbers
      if (number < 0.0f)
      {
@@ -332,6 +404,7 @@ private:
 
      // Extract digits from the remainder one at a time
      while (digits-- > 0) {
+
        remainder *= 10.0f;
        unsigned digit = unsigned(remainder);
        print(digit);
@@ -391,6 +464,24 @@ struct _FBASE
 
 template<typename PRINT_T, typename T>
 inline PRINT_T &operator <<(PRINT_T &obj, const _FBASE<T> &arg) {
+  obj.print(arg.val, arg.digits); return obj;
+}
+
+//   Serial << _FIX16(temp_celsius, 2); // 2 digits of precision
+
+template<typename T>
+struct _FIX16BASE
+{
+  const T val;
+  const unsigned digits;
+
+  _FIX16BASE(const T v, const unsigned d): val(v), digits(d) {}
+};
+
+#define _FIX16(f16,d) _FIX16BASE<fix16_t>((f16),(d))
+
+template<typename PRINT_T, typename T>
+inline PRINT_T &operator <<(PRINT_T &obj, const _FIX16BASE<T> &arg) {
   obj.print(arg.val, arg.digits); return obj;
 }
 

@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <libfixmath/fix16.hpp>
+
 #include "logic.h"
 #include "ringbuffer.h"
 #include "cpu.h"

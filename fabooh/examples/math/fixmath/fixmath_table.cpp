@@ -1,19 +1,17 @@
 /**
- * fixmath_table.cpp - print a table of angles and sine using fix16_t
- *                     type from libfixmath and its trig functions
+ * fixmath_table.cpp - print a table of angles and sine using a fix16_t
+ *                     data type from libfixmath and its trigonometry functions
  *
  * see: http://en.wikipedia.org/wiki/Libfixmath
  *
- * $ msp430-size fixmath.elf
- *    text    data     bss     dec     hex filename
- *    1592       0       0    1592     638 fixmath_table.elf
- *
+ * $ msp430-size fixmath_table.elf
+ * text    data     bss     dec     hex filename
+ * 1406       0       2    1408     580 fixmath_table.elf
  */
 
 #include <fabooh.h>
 #include <main.h>
 #include <serial.h>
-#include "libfixmath/fix16.h"
 
 namespace {
   const uint32_t BAUD_RATE = 9600;
@@ -26,20 +24,16 @@ inline void setup() {
 }
 
 void loop() {
-  int angle;
-  char angle_str[1+1+1+4+1];
+  Fix16 angle; // use fix16_t for calculations
 
   Serial << "Table of Sin(a)" << endl;
 
-  for (angle = -90; angle <= 90; angle++ ) {
-    fix16_t sin_value = fix16_sin(fix16_deg_to_rad(fix16_from_int(angle)));
+  for (angle = -90; angle <= 90; angle += 1) {
+    fix16_t sin_value = angle.sind(); // calc sine from degrees
 
-    // TODO: implement fix16_t as a valid type in print_t
-    fix16_to_str(sin_value,angle_str,4);
-
-    Serial  << "angle = " << angle
-            << " sin = " << angle_str
-            << endl;
+    Serial << "angle = " << _FIX16(angle, 0)
+           << " sin =  " << _FIX16(sin_value, 4) /* 5 is max with fix16_t */
+           << endl;
   }
 
   LPM4; // stop here when done., press reset button to see again
