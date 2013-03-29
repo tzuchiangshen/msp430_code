@@ -28,10 +28,10 @@ void setup() {
 
 #ifdef USE_FIX16
   // create fix16_t constants
-  Fix16 c_0_413(413);    c_0_413 = c_0_413 / 1000;
-  Fix16 c_277_75(27775); c_277_75 = c_277_75 / 100;
-  Fix16 c_1_8(9);        c_1_8 = c_1_8/5;
-  Fix16 c_32(32);
+  const Fix16 c_0_413(0.413);
+  const Fix16 c_277_75(277.75);
+  const Fix16 c_1_8(9.0/5.0);
+  const Fix16 c_32(32);
 #endif
 
   // configure ADC to take temperature samples
@@ -54,8 +54,8 @@ void setup() {
 
     // output F and C temps
 #ifdef USE_FIX16
-    // working variable for cal
-    Fix16 f,c;
+    // working variables for calculations
+    Fix16 f, c;
 
     // convert sample to C = sample*0.413 - 277.75
     c = int16_t(sample);
