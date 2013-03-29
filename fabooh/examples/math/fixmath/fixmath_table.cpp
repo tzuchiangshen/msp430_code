@@ -5,25 +5,24 @@
  * see: http://en.wikipedia.org/wiki/Libfixmath
  *
  * $ msp430-size fixmath_table.elf
- * text    data     bss     dec     hex filename
- * 1406       0       2    1408     580 fixmath_table.elf
+ *    text    data     bss     dec     hex filename
+ *    1370       0       0    1370     55a fixmath_table.elf
  */
 
 #include <fabooh.h>
+#define SMALL_INIT4 // no data or bss? if so we can get rid of the c runtime lowlevel init functions
 #include <main.h>
 #include <serial.h>
 
 namespace {
   const uint32_t BAUD_RATE = 9600;
   typedef serial_default_t<BAUD_RATE, CPU::frequency, TX_PIN, NO_PIN> serial; /* TX=P?.? varies, RX=NO_PIN */
-  serial Serial;
 };
 
 inline void setup() {
-  Serial.begin(BAUD_RATE);
-}
+  serial Serial;
 
-void loop() {
+  Serial.begin(BAUD_RATE);
   Fix16 angle; // use fix16_t for calculations
 
   Serial << "Table of Sin(a)" << endl;
@@ -38,3 +37,5 @@ void loop() {
 
   LPM4; // stop here when done., press reset button to see again
 }
+
+void loop() {}
