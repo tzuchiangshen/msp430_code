@@ -26,18 +26,10 @@ typedef serial_default_t<9600,CPU::frequency,TX_PIN,NO_PIN> serial_t;
 void setup() {
   serial_t Serial;
 
-#ifdef USE_FIX16
-  // create fix16_t constants
-  const Fix16 c_0_413(0.413);
-  const Fix16 c_277_75(277.75);
-  const Fix16 c_1_8(9.0/5.0);
-  const Fix16 c_32(32);
-#endif
-
   // configure ADC to take temperature samples
   ADC10CTL0 = 0;
   ADC10CTL1 = INCH_10 | ADC10DIV_3;
-  ADC10CTL0 = SREF_1 | ADC10SHT_3 | REFON | ADC10ON | ADC10IE;
+  ADC10CTL0 = SREF_1 | ADC10SHT_3 | REFON | ADC10ON | ADC10IE | ENC;
 
   Serial.begin(9600);
 
@@ -47,34 +39,34 @@ void setup() {
 
   while(1) {
     // enable ADC sample, sleep till complete
-    ADC10CTL0 |= ENC + ADC10SC;
+    ADC10CTL0 |= ADC10SC;
     LPM3;
 
     sample = ADC10MEM;
 
     // output F and C temps
-#ifdef USE_FIX16
+  #ifdef USE_FIX16
     // working variables for calculations
     Fix16 f, c;
 
     // convert sample to C = sample*0.413 - 277.75
     c = int16_t(sample);
-    c= (c * c_0_413) - c_277_75;
+    c = (c * Fix16(0.413)) - Fix16(277.75);
     Serial << _FIX16(c + 0.5f, 0) << " C" << endl;
 
     // convert sample to F = C*9/5 + 32
-    f = (c * c_1_8) + c_32;
+    f = (c * Fix16(9.0/5.0)) + Fix16(32);
     Serial << _FIX16(f + 0.5f, 0) << " F" << endl;
-#endif
+  #endif
 
-#ifdef USE_INTEGER_MATH
+  #ifdef USE_INTEGER_MATH
     int conversion;
     conversion = ((27069L * sample) -  18169625L) >> 16;
     Serial << conversion << " C (43oh)" << endl;
 
     conversion = ((48724L * sample ) - 30634388L) >> 16;
     Serial << conversion << " F (43oh)" << endl;
-#endif
+  #endif
 
     Serial << endl;
     delay(5000);
