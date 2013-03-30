@@ -8,8 +8,6 @@
  *    text    data     bss     dec     hex filename
  *    1032       0       0    1032     408 adc_temp.elf
  *
- * see also:
- *   http://forum.43oh.com/topic/1954-using-the-internal-temperature-sensor/
  */
 
 #include <fabooh.h>
@@ -21,15 +19,15 @@ typedef serial_default_t<9600,CPU::frequency,TX_PIN,NO_PIN> serial_t;
 
 // conditional compiles let you compare sizes and code generated
 #define USE_FIX16
-#undef  USE_INTEGER_MATH
+#undef USE_INTEGER_MATH
 
 void setup() {
   serial_t Serial;
 
-  // configure ADC to take temperature samples
+  // configure ADC to take temperature samples see [2]
   ADC10CTL0 = 0;
   ADC10CTL1 = INCH_10 | ADC10DIV_3;
-  ADC10CTL0 = SREF_1 | ADC10SHT_3 | REFON | ADC10ON | ADC10IE | ENC;
+  ADC10CTL0 = SREF_1 | ADC10SHT_3 | REFON | ADC10ON | ADC10IE;
 
   Serial.begin(9600);
 
@@ -39,8 +37,9 @@ void setup() {
 
   while(1) {
     // enable ADC sample, sleep till complete
-    ADC10CTL0 |= ADC10SC;
+    ADC10CTL0 |= (ENC |ADC10SC);
     LPM3;
+    __nop(); // make debugger happy see [1]
 
     sample = ADC10MEM;
 
@@ -50,25 +49,23 @@ void setup() {
     Fix16 f, c;
 
     // convert sample to C = sample*0.413 - 277.75
-    c = int16_t(sample);
-    c = (c * Fix16(0.413)) - Fix16(277.75);
-    Serial << _FIX16(c + 0.5f, 0) << " C" << endl;
+    c = (Fix16(int16_t(sample)) * Fix16(0.413)) - Fix16(277.75);
+    Serial << _FIX16(c + 0.0005f, 3) << "C" << " ";
 
     // convert sample to F = C*9/5 + 32
     f = (c * Fix16(9.0/5.0)) + Fix16(32);
-    Serial << _FIX16(f + 0.5f, 0) << " F" << endl;
+    Serial << _FIX16(f + 0.005f, 2) << "F" << endl;
   #endif
 
   #ifdef USE_INTEGER_MATH
     int conversion;
     conversion = ((27069L * sample) -  18169625L) >> 16;
-    Serial << conversion << " C (43oh)" << endl;
+    Serial << conversion << "C ";
 
     conversion = ((48724L * sample ) - 30634388L) >> 16;
-    Serial << conversion << " F (43oh)" << endl;
+    Serial << conversion << "F (43oh)" << endl;
   #endif
 
-    Serial << endl;
     delay(5000);
   }
 }
@@ -79,6 +76,15 @@ void setup() {
 #pragma vector = ADC10_VECTOR
 __interrupt void ADC10_ISR(void) {
   LPM3_EXIT;
+  __nop(); // make debugger happy see [1]
 }
 
 void loop() {}
+
+/*
+ * References:
+ *
+ * [1] http://e2e.ti.com/support/microcontrollers/msp430/f/166/t/182673.aspx
+ * [2] http://forum.43oh.com/topic/1954-using-the-internal-temperature-sensor/
+ *
+ */
