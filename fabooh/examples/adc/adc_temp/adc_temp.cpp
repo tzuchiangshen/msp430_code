@@ -49,12 +49,12 @@ void setup() {
     Fix16 f, c;
 
     // convert sample to C = sample*0.413 - 277.75
-    c = (Fix16(int16_t(sample)) * Fix16(0.413)) - Fix16(277.75);
-    Serial << _FIX16(c + 0.0005f, 3) << "C" << " ";
+    c = (Fix16(int16_t(sample)) * Fix16(0.14663/0.355)) - Fix16(277.75);
+    Serial << _FIX16(c + 0.005f, 2) << "C" << " ";
 
     // convert sample to F = C*9/5 + 32
     f = (c * Fix16(9.0/5.0)) + Fix16(32);
-    Serial << _FIX16(f + 0.005f, 2) << "F" << endl;
+    Serial << _FIX16(f + 0.0005f, 3) << "F" << endl;
   #endif
 
   #ifdef USE_INTEGER_MATH
