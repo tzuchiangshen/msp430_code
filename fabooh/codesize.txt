@@ -11,4 +11,5 @@
    1030	      0	      0	   1030	    406	./examples/adc/adc_temp/adc_temp.elf
    1264	      0	      2	   1266	    4f2	./examples/math/cordic/cordic_table.elf
    1370	      0	      0	   1370	    55a	./examples/math/fixmath/fixmath_table.elf
+   1764	      0	     28	   1792	    700	./examples/serial/dco_calibrate/goldilocks.elf
   12084	      0	      2	  12086	   2f36	./examples/math/sin_table.elf
