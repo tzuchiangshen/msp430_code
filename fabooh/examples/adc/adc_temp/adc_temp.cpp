@@ -46,14 +46,13 @@ void setup() {
     // output F and C temps
   #ifdef USE_FIX16
     // working variables for calculations
-    Fix16 f, c;
 
     // convert sample to C = sample*0.413 - 277.75
-    c = (Fix16(int16_t(sample)) * Fix16(0.14663/0.355)) - Fix16(277.75);
+    Fix16 c = (Fix16(int16_t(sample)) * Fix16(0.14663/0.355)) - Fix16(277.75);
     Serial << _FIX16(c + 0.005f, 2) << "C" << " ";
 
     // convert sample to F = C*9/5 + 32
-    f = (c * Fix16(9.0/5.0)) + Fix16(32);
+    Fix16 f = (c * Fix16(9.0/5.0)) + Fix16(32);
     Serial << _FIX16(f + 0.0005f, 3) << "F" << endl;
   #endif
 
