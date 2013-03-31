@@ -66,7 +66,7 @@ const unsigned howmany=1+8+1; // 1 start bit + 8 data bits + 1 stop bit
 
 volatile uint16_t cnts[howmany];  // cycle count for each bit
 volatile uint16_t bits;           // received bits
-unsigned bit_indx;
+volatile unsigned bit_indx;
 
 /*
  *
