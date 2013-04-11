@@ -274,9 +274,9 @@ void gdb_bootloader() {
               chksum.data[0] = begin[0];
               chksum.data[1] = begin[1];
               *(uint8_t *)addr = hexstr2u16(chksum.data); // FlashMgr::write_u8()...
-              addr++;
             }
           }
+          addr++;
           begin += 2;
         } while(--cnt);
         FlashMgr::disable_write();
