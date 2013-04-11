@@ -180,10 +180,13 @@
  typedef GPIO_PIN<BIT1,P4,gpio_pin_button> PUSH2;
 #endif
 
+#ifdef __MSP430_HAS_PORT2_R__
  typedef P2_0 TX_PIN;
  typedef P2_1 RX_PIN;
 
  typedef P2_2 SCLK;
+#endif
+
  typedef P1_6 MOSI;
  typedef P1_7 MIS0;
 
