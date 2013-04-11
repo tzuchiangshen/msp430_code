@@ -47,8 +47,8 @@ ASFLAGS = $(CFLAGS)
 
 CCFLAGS = $(CFLAGS) -std=gnu++98 
 
-LDFLAGS=-g -mmcu=$(MCU) -mdisable-watchdog \
-		-Wl,--gc-sections,-Map=$(TARGET).map,-umain
+LDFLAGS=$(LDPRE) -g -mmcu=$(MCU) -mdisable-watchdog \
+		-Wl,--gc-sections,-Map=$(TARGET).map,-umain $(LDPOST)
 
 OBJECTS?=$(TARGET).o $(USEROBJS)
 

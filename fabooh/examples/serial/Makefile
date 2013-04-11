@@ -13,4 +13,4 @@ clean:
 	make -f echo.mk clean
 	make -C compare clean
 	make -C calc clean
-	make -C dco_calibrate all
+	make -C dco_calibrate clean
