@@ -372,6 +372,7 @@ void gdb_bootloader() {
      */
     if ( rsp_data[0] == 'k') {
       Serial << "$#00";
+      Serial.not_busy();
       WDTCTL = 0; // force a reset by using invalid WDT password
     }
 
@@ -403,7 +404,8 @@ void gdb_bootloader() {
       // the PC register (R0) and STACK register (R1)
 
       // T05 is SIGTRAP  5 Trace trap (POSIX) ..
-      Serial << "$T0500:00c0;01:fe03;#85";
+      //Serial << "$T0500:00c0;01:fe03;#85";
+      Serial << "$S05#b8";
       continue;
     }
 

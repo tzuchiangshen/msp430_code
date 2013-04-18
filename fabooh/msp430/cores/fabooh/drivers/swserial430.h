@@ -71,6 +71,10 @@ struct serial_base_sw_t {
       (void)baud; /* use template to set baud rate */
   }
 
+  void not_busy() {
+    __asm__ volatile("nop");
+  }
+
   /*
    * end() - set TX pin back to default
    */

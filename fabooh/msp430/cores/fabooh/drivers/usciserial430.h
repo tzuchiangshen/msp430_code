@@ -57,12 +57,16 @@ struct serial_base_usci_t {
       (void)baud_ignored;
   }
 
+  void not_busy() {
+    while (UCA0STAT & UCBUSY) ;
+  }
+
   /*
    * end() - set TX/RX pin back to default
    */
   void end() {
     // wait for TX/RX to finish
-    while (UCA0STAT & UCBUSY) ;
+    not_busy();
 
     // put USCI in reset
     UCA0CTL1 = UCSWRST;
