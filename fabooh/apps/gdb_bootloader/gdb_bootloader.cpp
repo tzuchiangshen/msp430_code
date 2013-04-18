@@ -155,7 +155,7 @@ void gdb_bootloader() {
 
   Serial.begin(BAUD_RATE);      // configure serial device pins and uart clock
 
-  const unsigned bufsize=47;    // match packet size we advertise see query packet below
+  const unsigned bufsize=63;    // match packet size we advertise see query packet below
   uint8_t rsp_data[bufsize+1];  // space to store received gdb rsp packet without '$' or '#xx' checksum
   unsigned indx, c;
 
@@ -344,7 +344,7 @@ void gdb_bootloader() {
        * $qSupported:qRelocInsn+#9a
        */
       if ( chksum.data[3] == 0x9a ) {
-        Serial << "$PacketSize=31#94"; // set maximum packet size gdb host will send
+        Serial << "$PacketSize=3f#c9"; // set maximum packet size gdb host will send
                                        // must match or be less than sizeof(rsp_data)-1
         continue;
       }
