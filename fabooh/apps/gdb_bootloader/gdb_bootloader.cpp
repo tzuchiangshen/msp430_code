@@ -155,7 +155,7 @@ void gdb_bootloader() {
 
   Serial.begin(BAUD_RATE);      // configure serial device pins and uart clock
 
-  const unsigned bufsize=49;    // match packet size we advertise see query packet below
+  const unsigned bufsize=47;    // match packet size we advertise see query packet below
   uint8_t rsp_data[bufsize+1];  // space to store received gdb rsp packet without '$' or '#xx' checksum
   unsigned indx, c;
 
@@ -388,6 +388,7 @@ void gdb_bootloader() {
         Serial << "0";    // send '0'  we aren't going to debug anyways
       } while(--cnt);
       Serial << "#33";
+      continue;
     }
 
     /*
