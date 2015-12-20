@@ -1,3 +1,5 @@
+NOTE: this code has moved to https://github.com/RickKimball/fabooh
+
 FABOOH - \ˈfab-ü\ 
 =================
 
